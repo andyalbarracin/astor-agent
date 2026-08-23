@@ -1,6 +1,6 @@
 import { ActivityIndicator, View } from 'react-native';
 import { Redirect, Tabs } from 'expo-router';
-import { LayoutDashboard, SquareCheckBig, Repeat } from 'lucide-react-native';
+import { LayoutDashboard, ListTodo, SquareCheckBig, Repeat } from 'lucide-react-native';
 import { useTheme } from '@astor/design-tokens/mobile';
 import { useSession } from '@/contexts/session';
 
@@ -41,6 +41,10 @@ export default function AppLayout() {
       <Tabs.Screen
         name="index"
         options={{ title: 'Hoy', tabBarIcon: ({ color, size }) => <LayoutDashboard color={color} size={size} /> }}
+      />
+      <Tabs.Screen
+        name="productividad"
+        options={{ title: 'Día', tabBarIcon: ({ color, size }) => <ListTodo color={color} size={size} /> }}
       />
       <Tabs.Screen
         name="tasks"

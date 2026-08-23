@@ -12,6 +12,7 @@ export type {
   TaskSource,
   HabitPeriod,
   HabitLogStatus,
+  RoutineKind,
 } from './types';
 
 export { createServiceClient, type AstorClient } from './client';

@@ -15,6 +15,7 @@ export type {
   CategoryKind,
   HabitPeriod,
   HabitLogStatus,
+  RoutineKind,
 } from '@astor/supabase';
 
 // Tareas
@@ -51,3 +52,17 @@ export {
   type Habit,
   type HabitLog,
 } from './habits/functions';
+
+// Rutinas
+export * from './routines/schema';
+export {
+  listRoutines,
+  getRoutineCompletions,
+  toggleRoutineItem,
+  createRoutine,
+  addRoutineItem,
+  deleteRoutineItem,
+  type Routine,
+  type RoutineItem,
+  type RoutineWithItems,
+} from './routines/functions';

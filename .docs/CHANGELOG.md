@@ -49,6 +49,18 @@
 - Monorepo: `metro.config.js` (watch del workspace + package exports) y `.npmrc` `node-linker=hoisted`
   (recomendado por Expo para pnpm).
 
+## Productividad — Rutinas + To-do del día ✅
+
+- **Migración `0005_routines.sql`**: `routines` (morning/night/custom), `routine_items`,
+  `routine_completions` (una fila = ítem hecho ese día; resetea al cambiar de día) + RLS + realtime.
+- **Dominio** (`packages/core/routines`): `listRoutines` (con ítems), `getRoutineCompletions(date)`,
+  `toggleRoutineItem`, `createRoutine`, `addRoutineItem`, `deleteRoutineItem`.
+- **Web** `/productividad`: To-do de hoy (checklist + agregar, reusa `tasks`) + cards de rutina
+  matutina/nocturna con checkboxes y progreso. Nav "Productividad".
+- **Mobile**: tab "Día" con la misma experiencia (checklist del día + rutinas), estilo sobrio,
+  con realtime.
+- Seed de rutinas de ejemplo para juan (ritual matutino/nocturno) aplicado en la DB.
+
 ## Fase 1 — Loop núcleo ✅
 
 ### 1a — Dominio (core + supabase + migraciones) (hecho)

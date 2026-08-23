@@ -21,15 +21,19 @@
 | 0002 | `0002_tasks.sql` | 1 | `categories`, `tasks`, `task_checklist_items` |
 | 0003 | `0003_habits.sql` | 1 | `habits`, `habit_logs` |
 | 0004 | `0004_enable_realtime.sql` | 1 | realtime de `tasks`/`habit_logs`/`habits` |
-| 0005 | `0005_messaging_agent.sql` | 2 | `messaging_accounts`, `agent_messages`, `briefing_prefs` |
-| 0006 | `0006_agent_external_surface.sql` | 2 | `api_tokens`, `webhook_endpoints`, `webhook_deliveries` |
-| 0007 | `0007_finance_core.sql` | 3 | `currencies`, `fx_rates`, `accounts`, `transactions` |
-| 0008 | `0008_finance_cards_installments.sql` | 3 | `credit_cards`, `card_invoices`, `installment_plans`, `installments` |
-| 0009 | `0009_finance_budgets_recurring.sql` | 3 | `budgets`, `recurring_entries` |
-| 0010 | `0010_workouts.sql` | 4 | `exercises`, `workout_templates`, `workout_template_items`, `workout_sessions`, `set_logs`, `cardio_logs` |
-| 0011 | `0011_studies.sql` | 4 | `subjects`, `study_topics`, `study_sessions`, `study_links` |
-| 0012 | `0012_focus.sql` | 4 | `focus_sessions` |
-| 0013 | `0013_integrations.sql` | 5 | `calendar_connections`, `calendar_sync_state` |
+| 0005 | `0005_routines.sql` | Prod. | `routines`, `routine_items`, `routine_completions` |
+| 0006 | `0006_messaging_agent.sql` | 2 | `messaging_accounts`, `agent_messages`, `briefing_prefs` |
+| 0007 | `0007_agent_external_surface.sql` | 2 | `api_tokens`, `webhook_endpoints`, `webhook_deliveries` |
+| 0008 | `0008_finance_core.sql` | 3 | `currencies`, `fx_rates`, `accounts`, `transactions` |
+| 0009 | `0009_finance_cards_installments.sql` | 3 | `credit_cards`, `card_invoices`, `installment_plans`, `installments` |
+| 0010 | `0010_finance_budgets_recurring.sql` | 3 | `budgets`, `recurring_entries` |
+| 0011 | `0011_workouts.sql` | 4 | `exercises`, `workout_templates`, `workout_template_items`, `workout_sessions`, `set_logs`, `cardio_logs` |
+| 0012 | `0012_studies.sql` | 4 | `subjects`, `study_topics`, `study_sessions`, `study_links` |
+| 0013 | `0013_focus.sql` | 4 | `focus_sessions` |
+| 0014 | `0014_integrations.sql` | 5 | `calendar_connections`, `calendar_sync_state` |
+
+> Nota: los números de Fase 2+ son indicativos (esas migraciones aún no existen); se
+> finalizan al construirlas. Reales hoy: 0000–0005.
 
 > Además: `seed.users.sql` (usuarios de prueba) y `seed.dev.sql` (datos dummy) — se corren a mano,
 > NO son migraciones de esquema. Todo el SQL vive en `.docs/migrations/`.

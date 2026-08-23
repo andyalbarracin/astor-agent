@@ -16,6 +16,7 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { label: 'Dashboard', icon: 'dashboard', href: '/' },
+  { label: 'Productividad', icon: 'productivity', href: '/productividad' },
   { label: 'Tareas', icon: 'task', href: '/tasks' },
   { label: 'Hábitos', icon: 'habit', href: '/habits' },
   { label: 'Finanzas', icon: 'finance' },

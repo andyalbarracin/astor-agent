@@ -23,6 +23,7 @@ export type TaskEisenhower =
 export type TaskSource = 'app' | 'telegram' | 'api' | 'mcp';
 export type HabitPeriod = 'day' | 'week' | 'month';
 export type HabitLogStatus = 'done' | 'skipped';
+export type RoutineKind = 'morning' | 'night' | 'custom';
 
 export interface Database {
   public: {
@@ -179,6 +180,66 @@ export interface Database {
         Update: Partial<Database['public']['Tables']['habit_logs']['Insert']>;
         Relationships: [];
       };
+      routines: {
+        Row: {
+          id: string;
+          user_id: string;
+          name: string;
+          kind: RoutineKind;
+          position: number;
+          archived: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          name: string;
+          kind?: RoutineKind;
+          position?: number;
+          archived?: boolean;
+        };
+        Update: Partial<Database['public']['Tables']['routines']['Insert']>;
+        Relationships: [];
+      };
+      routine_items: {
+        Row: {
+          id: string;
+          user_id: string;
+          routine_id: string;
+          label: string;
+          position: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          routine_id: string;
+          label: string;
+          position?: number;
+        };
+        Update: Partial<Database['public']['Tables']['routine_items']['Insert']>;
+        Relationships: [];
+      };
+      routine_completions: {
+        Row: {
+          id: string;
+          user_id: string;
+          routine_item_id: string;
+          date: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          routine_item_id: string;
+          date: string;
+        };
+        Update: Partial<Database['public']['Tables']['routine_completions']['Insert']>;
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;
@@ -192,6 +253,7 @@ export interface Database {
       task_source: TaskSource;
       habit_period: HabitPeriod;
       habit_log_status: HabitLogStatus;
+      routine_kind: RoutineKind;
     };
   };
 }

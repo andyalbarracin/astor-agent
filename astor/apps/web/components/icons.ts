@@ -6,6 +6,7 @@
 import {
   LayoutDashboard,
   SquareCheckBig,
+  ListTodo,
   Repeat,
   Wallet,
   Dumbbell,
@@ -22,6 +23,7 @@ import {
 export const icons = {
   dashboard: LayoutDashboard,
   task: SquareCheckBig,
+  productivity: ListTodo,
   habit: Repeat,
   finance: Wallet,
   workout: Dumbbell,
