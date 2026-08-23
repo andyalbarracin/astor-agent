@@ -36,7 +36,7 @@
   respeta sistema). Shell con sidebar (mapa de iconos lucide), toggle de tema (server action que
   persiste `profiles.theme`), gate de sesión, y dashboard con grilla de módulos (placeholder).
 - i18n/timezone: saludo y fecha con `luxon` según `timezone`/`locale` del perfil.
-- Seed de desarrollo: `.docs/seed/seed.dev.sql` (datos dummy AR por fase, incl. plan de 12 cuotas).
+- Seed de desarrollo: `.docs/migrations/seed.dev.sql` (datos dummy AR por fase).
 
 ### 0d — Shell mobile (hecho)
 - `apps/mobile`: Expo (SDK 52) + Expo Router, en paridad con web.
@@ -90,7 +90,7 @@
   (mockups de Tareas/Hábitos/Finanzas) sobre gradiente + imagen de fondo opcional; panel derecho
   con **auth por password** (`signInWithPassword`) + fallback de enlace mágico.
 - **Cards de acceso rápido** con usuarios de prueba (autocompletan email/password).
-- **Usuarios dummy**: `.docs/seed/seed.users.sql` crea `juan@astor.app` y `maria@astor.app`
+- **Usuarios dummy**: `.docs/migrations/seed.users.sql` crea `juan@astor.app` y `maria@astor.app`
   (password `astor1234`, email confirmado, con su fila en profiles vía trigger). `seed.dev.sql`
   ahora siembra el contenido dummy en **juan** (no en el owner), resuelto por email.
 - **Assets**: favicon pantera en `app/icon.svg`; carpeta `public/` con `brand/` y `login/` +
@@ -106,7 +106,7 @@
   - Las pantallas llaman las funciones de `@astor/core` directo con el cliente autenticado (RLS);
     cliente mobile tipado con `Database`.
 - **Realtime** (Supabase `postgres_changes`) en web y mobile: al cambiar `tasks`/`habit_logs` se
-  re-fetcha. Degrada con gracia; habilitar con `.docs/sql/enable-realtime.sql`.
+  re-fetcha. Degrada con gracia; habilitar con `.docs/migrations/0004_enable_realtime.sql`.
 - **Infra**: React alineado a **18.3.1** en todo el monorepo (Expo 52 lo fija; Next 15 lo soporta)
   vía overrides en `pnpm-workspace.yaml` — resuelve el choque de tipos `@types/react` web/mobile.
   Web build verde, mobile `tsc --noEmit` verde.

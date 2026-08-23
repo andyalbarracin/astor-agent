@@ -1,4 +1,4 @@
-/** Usuarios de prueba (dev). Crear con .docs/seed/seed.users.sql. */
+/** Usuarios de prueba (dev). Crear con .docs/migrations/seed.users.sql. */
 export interface TestUser {
   label: string;
   email: string;
