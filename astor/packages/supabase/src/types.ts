@@ -240,6 +240,41 @@ export interface Database {
         Update: Partial<Database['public']['Tables']['routine_completions']['Insert']>;
         Relationships: [];
       };
+      todo_sections: {
+        Row: {
+          id: string;
+          user_id: string;
+          name: string;
+          position: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: { id?: string; user_id: string; name: string; position?: number };
+        Update: Partial<Database['public']['Tables']['todo_sections']['Insert']>;
+        Relationships: [];
+      };
+      todo_items: {
+        Row: {
+          id: string;
+          user_id: string;
+          section_id: string;
+          label: string;
+          done: boolean;
+          position: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          section_id: string;
+          label: string;
+          done?: boolean;
+          position?: number;
+        };
+        Update: Partial<Database['public']['Tables']['todo_items']['Insert']>;
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;

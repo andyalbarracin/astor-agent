@@ -49,6 +49,17 @@
 - Monorepo: `metro.config.js` (watch del workspace + package exports) y `.npmrc` `node-linker=hoisted`
   (recomendado por Expo para pnpm).
 
+## Productividad — Checklist seccionado editable ✅
+
+- **Migración `0006_todos.sql`**: `todo_sections` + `todo_items` (checklist liviano tipo Notion,
+  `done` persiste; separado de `tasks`) + RLS + realtime.
+- **Secciones editables**: por defecto días de la semana (Lun–Dom, auto-creadas si el usuario no
+  tiene ninguna, `ensureDefaultTodoSections`), pero renombrables / agregables / borrables.
+- **Dominio** (`packages/core/todos`): list/ensure/create/rename/delete sección, add/toggle/delete ítem.
+- **Web**: reemplaza "To-do de hoy" por `SectionedTodos` (secciones colapsables, checkboxes, agregar
+  ítem/sección, renombrar/eliminar). **Mobile**: misma experiencia en el tab "Día".
+- Realtime de `todo_items` sumado al refresher web. Seed de secciones de ejemplo para juan.
+
 ## Productividad — Rutinas + To-do del día ✅
 
 - **Migración `0005_routines.sql`**: `routines` (morning/night/custom), `routine_items`,

@@ -24,6 +24,16 @@ export function RealtimeRefresher({ userId }: { userId: string }) {
         { event: '*', schema: 'public', table: 'habit_logs', filter: `user_id=eq.${userId}` },
         () => router.refresh(),
       )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'todo_items', filter: `user_id=eq.${userId}` },
+        () => router.refresh(),
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'routine_completions', filter: `user_id=eq.${userId}` },
+        () => router.refresh(),
+      )
       .subscribe();
     return () => {
       void supabase.removeChannel(channel);

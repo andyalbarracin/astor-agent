@@ -66,3 +66,19 @@ export {
   type RoutineItem,
   type RoutineWithItems,
 } from './routines/functions';
+
+// To-do seccionado
+export * from './todos/schema';
+export {
+  listTodoSections,
+  ensureDefaultTodoSections,
+  createTodoSection,
+  renameTodoSection,
+  deleteTodoSection,
+  addTodoItem,
+  toggleTodoItem,
+  deleteTodoItem,
+  type TodoSection,
+  type TodoItem,
+  type TodoSectionWithItems,
+} from './todos/functions';
