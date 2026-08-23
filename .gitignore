@@ -1,0 +1,42 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Astor · .gitignore de la RAÍZ del repo (astor-code/). Gobierna todo el árbol.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Secretos / entorno — NUNCA commitear
+.env
+.env.local
+.env.*.local
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Dependencias
+node_modules/
+**/node_modules/
+.pnpm-store/
+
+# Builds / caches
+.next/
+**/.next/
+dist/
+**/dist/
+out/
+build/
+.turbo/
+**/.turbo/
+.expo/
+**/.expo/
+coverage/
+**/coverage/
+
+# Supabase CLI local
+**/.branches/
+**/.temp/
+
+# OS / editor
+.DS_Store
+**/.DS_Store
+*.log
+.idea/
+.vscode/*
+!.vscode/extensions.json

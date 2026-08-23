@@ -1,0 +1,30 @@
+# deps
+node_modules/
+.pnpm-store/
+
+# builds
+.next/
+dist/
+out/
+build/
+.expo/
+.turbo/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# supabase
+.branches/
+.temp/
+
+# os / editor
+.DS_Store
+*.log
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# testing
+coverage/

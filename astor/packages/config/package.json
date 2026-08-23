@@ -1,0 +1,15 @@
+{
+  "name": "@astor/config",
+  "version": "0.0.0",
+  "private": true,
+  "files": [
+    "tsconfig.base.json",
+    "eslint.base.cjs",
+    "prettier.base.cjs"
+  ],
+  "exports": {
+    "./tsconfig.base.json": "./tsconfig.base.json",
+    "./eslint": "./eslint.base.cjs",
+    "./prettier": "./prettier.base.cjs"
+  }
+}

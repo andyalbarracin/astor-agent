@@ -1,0 +1,14 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# supabase-js 2.45.x usa el shape clásico de tipos que espera packages/supabase.
+# (Regenerar tipos con `supabase gen types` permitiría subir a 2.x más nuevo.)
+overrides:
+  "@supabase/supabase-js": "2.45.4"
+  # React 18 en todo el monorepo (Expo 52 fija 18.3.1; Next 15 lo soporta).
+  # Una sola copia evita el choque de tipos ReactNode (web/mobile).
+  react: "18.3.1"
+  react-dom: "18.3.1"
+  "@types/react": "18.3.12"
+  "@types/react-dom": "18.3.1"

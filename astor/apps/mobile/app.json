@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "Astor",
+    "slug": "astor",
+    "scheme": "astor",
+    "version": "0.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.astor.app"
+    },
+    "android": {
+      "package": "com.astor.app"
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}

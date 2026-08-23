@@ -1,0 +1,12 @@
+{
+  "extends": "@astor/config/tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "moduleResolution": "Bundler",
+    "noEmit": true
+  },
+  "include": ["src"],
+  // src/mobile importa 'react-native'; se typechea en apps/mobile (Fase 0d),
+  // que fija la versión de RN. Este paquete no la carga como dep de hoja.
+  "exclude": ["src/mobile"]
+}
