@@ -65,10 +65,10 @@ export function LoginForm() {
   }
 
   return (
-    <div className="w-full max-w-[340px]">
-      <div className="mb-7">
-        <h1 className="text-700 font-bold tracking-[-0.02em] text-fg-default">Entrá a Astor</h1>
-        <p className="mt-1.5 text-200 text-fg-subtle">Tu sistema de ejecución diaria.</p>
+    <div className="w-full max-w-[400px]">
+      <div className="mb-8">
+        <h1 className="text-800 font-bold tracking-[-0.02em] text-fg-default">Entrá a Astor</h1>
+        <p className="mt-2 text-400 text-fg-subtle">Tu sistema de ejecución diaria.</p>
       </div>
 
       {error && (
@@ -93,7 +93,7 @@ export function LoginForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="vos@ejemplo.com"
-            className="h-11"
+            className="h-12 text-400"
           />
         </div>
         <div className="flex flex-col gap-1.5">
@@ -116,7 +116,7 @@ export function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="h-11 pr-10"
+              className="h-12 pr-10 text-400"
             />
             <button
               type="button"
@@ -129,7 +129,7 @@ export function LoginForm() {
           </div>
         </div>
 
-        <Button type="submit" variant="signature" size="lg" disabled={pending} className="mt-1 h-11">
+        <Button type="submit" variant="signature" size="lg" disabled={pending} className="mt-1 h-12 text-400">
           {pending ? 'Entrando…' : 'Ingresar'}
         </Button>
       </form>
@@ -149,18 +149,18 @@ export function LoginForm() {
               type="button"
               onClick={() => fill(u)}
               className={cn(
-                'group flex items-center gap-3 rounded-lg border border-line-subtle bg-surface-raised px-3 py-2.5 text-left transition-colors',
+                'group flex items-center gap-3 rounded-xl border border-line-subtle bg-surface-raised px-4 py-3 text-left transition-colors',
                 'hover:border-line-default hover:bg-surface-overlay',
               )}
             >
-              <span className="flex size-8 items-center justify-center rounded-full bg-signature-soft text-100 font-semibold text-signature-text">
+              <span className="flex size-10 items-center justify-center rounded-full bg-signature-soft text-200 font-semibold text-signature-text">
                 {u.label.charAt(0)}
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-200 font-medium text-fg-default">{u.email}</span>
-                <span className="block text-100 text-fg-subtlest">{u.hint}</span>
+                <span className="block truncate text-300 font-medium text-fg-default">{u.email}</span>
+                <span className="block text-200 text-fg-subtlest">{u.hint}</span>
               </span>
-              <Copy className="size-3.5 text-fg-subtlest opacity-0 transition-opacity group-hover:opacity-100" />
+              <Copy className="size-4 text-fg-subtlest opacity-0 transition-opacity group-hover:opacity-100" />
             </button>
           ))}
         </div>

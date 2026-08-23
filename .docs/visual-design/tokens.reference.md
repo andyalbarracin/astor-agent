@@ -1,42 +1,43 @@
 # Astor — Referencia de tokens
 
-> Documento vivo. Valores concretos que implementa `packages/design-tokens` (Fase 0b).
-> Derivados de los fundamentos de Atlassian Design System. **Default: dark.**
+> Documento vivo. Valores concretos que implementa `packages/design-tokens`.
+> Paleta: **Onyx** #0A171D · **Wheat** #FFF6E9 · **Oceanic** #003F47 · **Nectarine** #FFBD76
+> + verde césped (success). **Default: dark.**
 
 ## Color — semántico (light / dark)
 
 | Token | Light | Dark |
 |---|---|---|
-| `surface.base` | `#FFFFFF` | `#101214` |
-| `surface.raised` | `#FFFFFF` | `#161A1D` |
-| `surface.overlay` | `#FFFFFF` | `#22272B` |
-| `surface.sunken` | `#F7F8F9` | `#0D0F10` |
-| `text.default` | `#172B4D` | `#E7EDF3` |
-| `text.subtle` | `#44546F` | `#9FADBC` |
-| `text.subtlest` | `#626F86` | `#7A8896` |
-| `text.inverse` | `#FFFFFF` | `#1D2125` |
-| `text.disabled` | `#8993A4` | `#5A6572` |
-| `border.default` | `#DCDFE4` | `#2C333A` |
-| `border.subtle` | `#EBECF0` | `#22272B` |
-| `border.focus` | `#388BFF` | `#4C9AFF` |
-| `brand.default` | `#0C66E4` | `#4C9AFF` |
-| `brand.bold` | `#0055CC` | `#579DFF` |
-| `brand.text` | `#0C66E4` | `#85B8FF` |
+| `surface.base` | `#FFF6E9` (wheat) | `#0A171D` (onyx) |
+| `surface.raised` | `#FFFFFF` | `#10222B` |
+| `surface.overlay` | `#FFFFFF` | `#18303A` |
+| `surface.sunken` | `#F6EAD5` | `#060F14` |
+| `text.default` | `#0A171D` | `#EAF1F4` |
+| `text.subtle` | `#45565E` | `#9FB2BC` |
+| `text.subtlest` | `#6B7C84` | `#6E8591` |
+| `text.inverse` | `#FFF6E9` | `#0A171D` |
+| `text.disabled` | `#9AA7AD` | `#4E626D` |
+| `border.default` | `#E4D8C2` | `#21343E` |
+| `border.subtle` | `#EFE6D5` | `#152833` |
+| `border.focus` | `#007A8A` | `#3FA9B8` |
+| `brand.default` (oceanic) | `#005A66` | `#3FA9B8` |
+| `brand.bold` | `#003F47` | `#5FC0CE` |
+| `brand.text` | `#005A66` | `#8AD3DE` |
 | `danger.default` | `#C9372C` | `#F87168` |
 | `danger.text` | `#AE2A19` | `#FD9891` |
 | `danger.subtle` | `#FFECEB` | `#42221F` |
-| `success.default` | `#22A06B` | `#4BCE97` |
-| `success.text` | `#216E4E` | `#7EE2B8` |
-| `success.subtle` | `#DCFFF1` | `#1C3329` |
+| `success.default` (verde césped) | `#4E9A3E` | `#7CC96A` |
+| `success.text` | `#2E6B26` | `#A7E09A` |
+| `success.subtle` | `#E4F5DE` | `#14290F` |
 | `warning.default` | `#E2B203` | `#F5CD47` |
 | `warning.text` | `#7F5F01` | `#F8E6A0` |
 | `warning.subtle` | `#FFF7D6` | `#332E1B` |
 | `discovery.default` | `#6E5DC6` | `#9F8FEF` |
 | `discovery.text` | `#5E4DB2` | `#B8ACF6` |
 | `discovery.subtle` | `#F3F0FF` | `#2B2451` |
-| `signature.default` (ámbar pantera) | `#B45309` | `#F4B860` |
-| `signature.text` | `#92400E` | `#F8CE97` |
-| `signature.soft` | `#FBEBD2` | `#2A2013` |
+| `signature.default` (nectarine) | `#C77A22` | `#FFBD76` |
+| `signature.text` | `#8A4E12` | `#FFD5A3` |
+| `signature.soft` | `#FFEBD0` | `#2A1D0F` |
 
 ## Espaciado (escala 4px)
 

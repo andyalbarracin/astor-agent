@@ -19,7 +19,8 @@ create or replace function public.astor_create_test_user(
 returns uuid
 language plpgsql
 security definer
-set search_path = auth, public
+-- extensions: donde Supabase instala pgcrypto (gen_salt/crypt/gen_random_uuid)
+set search_path = auth, public, extensions
 as $$
 declare
   uid uuid;
