@@ -72,10 +72,12 @@ export default function ProductividadScreen() {
     await addTodoItem(ctx, { sectionId, label });
     void load();
   }
-  async function toggle(itemId: string, done: boolean) {
+  function toggle(itemId: string, done: boolean) {
     if (!ctx) return;
-    await toggleTodoItem(ctx, itemId, done);
-    void load();
+    setSections((cur) =>
+      cur.map((s) => ({ ...s, items: s.items.map((i) => (i.id === itemId ? { ...i, done } : i)) })),
+    );
+    void toggleTodoItem(ctx, itemId, done);
   }
   async function removeItem(itemId: string) {
     if (!ctx) return;
@@ -89,10 +91,15 @@ export default function ProductividadScreen() {
     await createTodoSection(ctx, { name });
     void load();
   }
-  async function toggleRoutine(itemId: string, done: boolean) {
+  function toggleRoutine(itemId: string, done: boolean) {
     if (!ctx) return;
-    await toggleRoutineItem(ctx, itemId, today, done);
-    void load();
+    setCompleted((prev) => {
+      const n = new Set(prev);
+      if (done) n.add(itemId);
+      else n.delete(itemId);
+      return n;
+    });
+    void toggleRoutineItem(ctx, itemId, today, done);
   }
 
   return (

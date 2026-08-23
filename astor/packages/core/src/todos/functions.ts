@@ -108,3 +108,28 @@ export async function deleteTodoItem(ctx: DomainContext, itemId: string): Promis
   const { error } = await ctx.supabase.from('todo_items').delete().eq('id', itemId);
   assertNoDbError(error);
 }
+
+export async function renameTodoItem(
+  ctx: DomainContext,
+  itemId: string,
+  label: string,
+): Promise<void> {
+  const clean = label.trim();
+  if (!clean) return;
+  const { error } = await ctx.supabase.from('todo_items').update({ label: clean }).eq('id', itemId);
+  assertNoDbError(error);
+}
+
+/** Reordena secciones: setea position = índice en orderedIds. */
+export async function reorderTodoSections(ctx: DomainContext, orderedIds: string[]): Promise<void> {
+  await Promise.all(
+    orderedIds.map((id, i) => ctx.supabase.from('todo_sections').update({ position: i }).eq('id', id)),
+  );
+}
+
+/** Reordena ítems dentro de una sección. */
+export async function reorderTodoItems(ctx: DomainContext, orderedIds: string[]): Promise<void> {
+  await Promise.all(
+    orderedIds.map((id, i) => ctx.supabase.from('todo_items').update({ position: i }).eq('id', id)),
+  );
+}

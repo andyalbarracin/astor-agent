@@ -8,7 +8,7 @@ import {
 } from '@astor/core';
 import { getDomainContext } from '@/lib/domain';
 import { PageHeader } from '@/components/page-header';
-import { RoutineCard } from '@/components/productivity/routine-card';
+import { RoutinesList } from '@/components/productivity/routines-list';
 import { SectionedTodos } from '@/components/productivity/sectioned-todos';
 
 const KIND_ORDER: Record<string, number> = { morning: 0, custom: 1, night: 2 };
@@ -37,11 +37,7 @@ export default async function ProductividadPage() {
       <PageHeader title="Productividad" subtitle={now.toLocaleString(DateTime.DATE_HUGE)} />
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.15fr_1fr]">
         <SectionedTodos sections={sections} />
-        <div className="flex flex-col gap-5">
-          {sortedRoutines.map((r) => (
-            <RoutineCard key={r.id} routine={r} completedIds={completedIds} date={today} />
-          ))}
-        </div>
+        <RoutinesList routines={sortedRoutines} completedIds={completedIds} date={today} />
       </div>
     </div>
   );

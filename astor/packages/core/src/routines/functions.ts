@@ -99,3 +99,47 @@ export async function deleteRoutineItem(ctx: DomainContext, itemId: string): Pro
   const { error } = await ctx.supabase.from('routine_items').delete().eq('id', itemId);
   assertNoDbError(error);
 }
+
+export async function renameRoutine(
+  ctx: DomainContext,
+  routineId: string,
+  name: string,
+): Promise<void> {
+  const clean = name.trim();
+  if (!clean) return;
+  const { error } = await ctx.supabase.from('routines').update({ name: clean }).eq('id', routineId);
+  assertNoDbError(error);
+}
+
+export async function deleteRoutine(ctx: DomainContext, routineId: string): Promise<void> {
+  const { error } = await ctx.supabase.from('routines').delete().eq('id', routineId);
+  assertNoDbError(error);
+}
+
+export async function renameRoutineItem(
+  ctx: DomainContext,
+  itemId: string,
+  label: string,
+): Promise<void> {
+  const clean = label.trim();
+  if (!clean) return;
+  const { error } = await ctx.supabase
+    .from('routine_items')
+    .update({ label: clean })
+    .eq('id', itemId);
+  assertNoDbError(error);
+}
+
+export async function reorderRoutines(ctx: DomainContext, orderedIds: string[]): Promise<void> {
+  await Promise.all(
+    orderedIds.map((id, i) => ctx.supabase.from('routines').update({ position: i }).eq('id', id)),
+  );
+}
+
+export async function reorderRoutineItems(ctx: DomainContext, orderedIds: string[]): Promise<void> {
+  await Promise.all(
+    orderedIds.map((id, i) =>
+      ctx.supabase.from('routine_items').update({ position: i }).eq('id', id),
+    ),
+  );
+}

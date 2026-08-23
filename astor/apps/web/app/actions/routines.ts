@@ -6,6 +6,11 @@ import {
   addRoutineItem,
   createRoutine,
   deleteRoutineItem,
+  renameRoutine,
+  deleteRoutine,
+  renameRoutineItem,
+  reorderRoutines,
+  reorderRoutineItems,
   type RoutineKind,
 } from '@astor/core';
 import { getDomainContext } from '@/lib/domain';
@@ -70,4 +75,34 @@ export async function createRoutineAction(name: string, kind: RoutineKind): Prom
   } catch (e) {
     return fail(e);
   }
+}
+
+async function run(
+  fn: (ctx: NonNullable<Awaited<ReturnType<typeof getDomainContext>>>) => Promise<void>,
+): Promise<ActionResult> {
+  const ctx = await getDomainContext();
+  if (!ctx) return { ok: false, error: 'Sesión expirada.' };
+  try {
+    await fn(ctx);
+    rev();
+    return { ok: true };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
+export async function renameRoutineAction(id: string, name: string) {
+  return run((ctx) => renameRoutine(ctx, id, name));
+}
+export async function deleteRoutineAction(id: string) {
+  return run((ctx) => deleteRoutine(ctx, id));
+}
+export async function renameRoutineItemAction(itemId: string, label: string) {
+  return run((ctx) => renameRoutineItem(ctx, itemId, label));
+}
+export async function reorderRoutinesAction(ids: string[]) {
+  return run((ctx) => reorderRoutines(ctx, ids));
+}
+export async function reorderRoutineItemsAction(ids: string[]) {
+  return run((ctx) => reorderRoutineItems(ctx, ids));
 }

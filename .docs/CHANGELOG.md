@@ -49,6 +49,19 @@
 - Monorepo: `metro.config.js` (watch del workspace + package exports) y `.npmrc` `node-linker=hoisted`
   (recomendado por Expo para pnpm).
 
+## Productividad + shell — polish (optimistic, DnD, responsive) ✅
+
+- **Latencia resuelta**: checkboxes con **optimistic UI** (web y mobile) — cambian al instante, la
+  acción va en background; realtime reconcilia. Se sacó el `router.refresh()` por click.
+- **Secciones**: cards separadas, **coloreadas** (una por día, paleta), **drag-and-drop** para
+  reordenar (dnd-kit, con handle `⋮⋮`), y todo editable (renombrar/eliminar sección, agregar/
+  renombrar/eliminar ítems). Dominio: `reorderTodoSections/Items`, `renameTodoItem`.
+- **Rituales** (RoutinesList): mismas capacidades — renombrar/eliminar ritual, editar ítems,
+  reordenar cards por DnD. Dominio: `renameRoutine`, `deleteRoutine`, `renameRoutineItem`, `reorder*`.
+- **Sidebar colapsable** (persistido en localStorage, icono `PanelLeft`).
+- **Responsive**: en < lg el sidebar se oculta y aparece un **navbar inferior**; `main` con padding
+  adaptable. **Login** con marca arriba en mobile (slider oculto).
+
 ## Productividad — Checklist seccionado editable ✅
 
 - **Migración `0006_todos.sql`**: `todo_sections` + `todo_items` (checklist liviano tipo Notion,

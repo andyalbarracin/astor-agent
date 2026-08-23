@@ -8,6 +8,9 @@ import {
   addTodoItem,
   toggleTodoItem,
   deleteTodoItem,
+  renameTodoItem,
+  reorderTodoSections,
+  reorderTodoItems,
 } from '@astor/core';
 import { getDomainContext } from '@/lib/domain';
 
@@ -48,4 +51,13 @@ export async function toggleTodoItemAction(itemId: string, done: boolean) {
 }
 export async function deleteTodoItemAction(itemId: string) {
   return withCtx((ctx) => deleteTodoItem(ctx, itemId));
+}
+export async function renameTodoItemAction(itemId: string, label: string) {
+  return withCtx((ctx) => renameTodoItem(ctx, itemId, label));
+}
+export async function reorderTodoSectionsAction(orderedIds: string[]) {
+  return withCtx((ctx) => reorderTodoSections(ctx, orderedIds));
+}
+export async function reorderTodoItemsAction(orderedIds: string[]) {
+  return withCtx((ctx) => reorderTodoItems(ctx, orderedIds));
 }
