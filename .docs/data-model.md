@@ -23,10 +23,12 @@
 | 0004 | `0004_enable_realtime.sql` | 1 | realtime de `tasks`/`habit_logs`/`habits` |
 | 0005 | `0005_routines.sql` | Prod. | `routines`, `routine_items`, `routine_completions` |
 | 0006 | `0006_todos.sql` | Prod. | `todo_sections`, `todo_items` (checklist seccionado editable) |
-| 0007+ | (Fase 2+) | 2 | `messaging_agent`, `agent_external_surface`, finanzas, workouts, estudios, enfoque, integraciones |
+| 0007 | `0007_studies.sql` | 4 | `study_programs`, `subjects`, `study_topics`, `study_sessions`, `study_resources` |
+| 0008 | `0008_focus.sql` | 4 | `focus_sessions` (pomodoro, liga tarea/materia) |
+| 0009+ | (Fase 2/3/5) | — | `messaging_agent`, `agent_external_surface`, finanzas, workouts, integraciones |
 
-> Nota: los números de Fase 2+ son indicativos (esas migraciones aún no existen); se
-> finalizan al construirlas. Reales hoy: 0000–0006.
+> Nota: los números de Fase 2/3/5 son indicativos (aún no existen). Reales hoy: 0000–0008.
+> Modelo de Estudios/Enfoque: ver `.docs/modules/estudios-enfoque.md`.
 
 > Además: `seed.users.sql` (usuarios de prueba) y `seed.dev.sql` (datos dummy) — se corren a mano,
 > NO son migraciones de esquema. Todo el SQL vive en `.docs/migrations/`.
