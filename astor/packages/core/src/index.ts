@@ -16,6 +16,10 @@ export type {
   HabitPeriod,
   HabitLogStatus,
   RoutineKind,
+  StudyProgramKind,
+  StudyStatus,
+  TopicStatus,
+  ResourceKind,
 } from '@astor/supabase';
 
 // Tareas
@@ -90,3 +94,35 @@ export {
   type TodoItem,
   type TodoSectionWithItems,
 } from './todos/functions';
+
+// Estudios
+export * from './studies/schema';
+export {
+  listProgramsWithProgress,
+  getProgram,
+  createProgram,
+  updateProgram,
+  deleteProgram,
+  listSubjectsWithTopics,
+  createSubject,
+  deleteSubject,
+  createTopic,
+  setTopicStatus,
+  deleteTopic,
+  logStudySession,
+  getStudyOverview,
+  listResources,
+  addResource,
+  deleteResource,
+  type Program,
+  type Subject,
+  type Topic,
+  type StudySession,
+  type StudyResource,
+  type ProgramWithProgress,
+  type SubjectWithTopics,
+} from './studies/functions';
+
+// Enfoque (Pomodoro)
+export * from './focus/schema';
+export { logFocusSession, getFocusToday, type FocusSession } from './focus/functions';

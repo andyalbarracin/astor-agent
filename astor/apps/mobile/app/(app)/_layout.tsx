@@ -1,6 +1,6 @@
 import { ActivityIndicator, View } from 'react-native';
 import { Redirect, Tabs } from 'expo-router';
-import { LayoutDashboard, ListTodo, SquareCheckBig, Repeat } from 'lucide-react-native';
+import { LayoutDashboard, ListTodo, SquareCheckBig, Repeat, GraduationCap } from 'lucide-react-native';
 import { useTheme } from '@astor/design-tokens/mobile';
 import { useSession } from '@/contexts/session';
 
@@ -53,6 +53,10 @@ export default function AppLayout() {
       <Tabs.Screen
         name="habits"
         options={{ title: 'Hábitos', tabBarIcon: ({ color, size }) => <Repeat color={color} size={size} /> }}
+      />
+      <Tabs.Screen
+        name="estudios"
+        options={{ title: 'Estudios', tabBarIcon: ({ color, size }) => <GraduationCap color={color} size={size} /> }}
       />
     </Tabs>
   );

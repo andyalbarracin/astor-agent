@@ -49,6 +49,19 @@
 - Monorepo: `metro.config.js` (watch del workspace + package exports) y `.npmrc` `node-linker=hoisted`
   (recomendado por Expo para pnpm).
 
+## Estudios + Enfoque — módulo (web + mobile Estudios) ✅
+
+- **Dominio** `packages/core/{studies,focus}`: programas con progreso, materias, temas
+  (por estudiar/estudiando/aprendido), horas (`study_sessions`), recursos; Pomodoro (`focus_sessions`).
+  Tipos en `packages/supabase`.
+- **Web** `/estudios`: stats (horas/temas/programas) + **cards de programas coloridas** con progreso
+  y **countdown a examen**. `/estudios/[id]`: materias + tablero de temas (ciclo estado, optimista) +
+  registrar horas + recursos. `/enfoque`: **Pomodoro** (ring, foco/descanso) que registra sesiones
+  y, si liga materia, cuenta como horas de estudio.
+- **Mobile**: tab **Estudios** (cards con countdown + temas con ciclo de estado + crear programa).
+- Sidebar/bottom-nav: Estudios y Enfoque activados. Seed de estudios para juan aplicado.
+- Deuda: Pomodoro mobile + recursos/horas mobile (ver tech-debt).
+
 ## Productividad + shell — polish (optimistic, DnD, responsive) ✅
 
 - **Latencia resuelta**: checkboxes con **optimistic UI** (web y mobile) — cambian al instante, la

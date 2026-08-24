@@ -24,6 +24,10 @@ export type TaskSource = 'app' | 'telegram' | 'api' | 'mcp';
 export type HabitPeriod = 'day' | 'week' | 'month';
 export type HabitLogStatus = 'done' | 'skipped';
 export type RoutineKind = 'morning' | 'night' | 'custom';
+export type StudyProgramKind = 'curso' | 'carrera' | 'examen' | 'otro';
+export type StudyStatus = 'active' | 'paused' | 'done' | 'archived';
+export type TopicStatus = 'todo' | 'learning' | 'learned';
+export type ResourceKind = 'video' | 'pdf' | 'link' | 'playlist' | 'book' | 'otro';
 
 export interface Database {
   public: {
@@ -275,6 +279,152 @@ export interface Database {
         Update: Partial<Database['public']['Tables']['todo_items']['Insert']>;
         Relationships: [];
       };
+      study_programs: {
+        Row: {
+          id: string;
+          user_id: string;
+          name: string;
+          kind: StudyProgramKind;
+          color: string | null;
+          institution: string | null;
+          status: StudyStatus;
+          target_date: string | null;
+          position: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          name: string;
+          kind?: StudyProgramKind;
+          color?: string | null;
+          institution?: string | null;
+          status?: StudyStatus;
+          target_date?: string | null;
+          position?: number;
+        };
+        Update: Partial<Database['public']['Tables']['study_programs']['Insert']>;
+        Relationships: [];
+      };
+      subjects: {
+        Row: {
+          id: string;
+          user_id: string;
+          program_id: string | null;
+          name: string;
+          color: string | null;
+          status: StudyStatus;
+          position: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          program_id?: string | null;
+          name: string;
+          color?: string | null;
+          status?: StudyStatus;
+          position?: number;
+        };
+        Update: Partial<Database['public']['Tables']['subjects']['Insert']>;
+        Relationships: [];
+      };
+      study_topics: {
+        Row: {
+          id: string;
+          user_id: string;
+          subject_id: string;
+          title: string;
+          status: TopicStatus;
+          position: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          subject_id: string;
+          title: string;
+          status?: TopicStatus;
+          position?: number;
+        };
+        Update: Partial<Database['public']['Tables']['study_topics']['Insert']>;
+        Relationships: [];
+      };
+      study_sessions: {
+        Row: {
+          id: string;
+          user_id: string;
+          subject_id: string | null;
+          topic_id: string | null;
+          minutes: number;
+          note: string | null;
+          occurred_on: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          subject_id?: string | null;
+          topic_id?: string | null;
+          minutes: number;
+          note?: string | null;
+          occurred_on?: string;
+        };
+        Update: Partial<Database['public']['Tables']['study_sessions']['Insert']>;
+        Relationships: [];
+      };
+      study_resources: {
+        Row: {
+          id: string;
+          user_id: string;
+          subject_id: string | null;
+          program_id: string | null;
+          title: string;
+          url: string | null;
+          kind: ResourceKind;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          subject_id?: string | null;
+          program_id?: string | null;
+          title: string;
+          url?: string | null;
+          kind?: ResourceKind;
+        };
+        Update: Partial<Database['public']['Tables']['study_resources']['Insert']>;
+        Relationships: [];
+      };
+      focus_sessions: {
+        Row: {
+          id: string;
+          user_id: string;
+          task_id: string | null;
+          subject_id: string | null;
+          started_at: string;
+          duration: number;
+          note: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          task_id?: string | null;
+          subject_id?: string | null;
+          started_at?: string;
+          duration: number;
+          note?: string | null;
+        };
+        Update: Partial<Database['public']['Tables']['focus_sessions']['Insert']>;
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;
@@ -289,6 +439,10 @@ export interface Database {
       habit_period: HabitPeriod;
       habit_log_status: HabitLogStatus;
       routine_kind: RoutineKind;
+      study_program_kind: StudyProgramKind;
+      study_status: StudyStatus;
+      topic_status: TopicStatus;
+      resource_kind: ResourceKind;
     };
   };
 }

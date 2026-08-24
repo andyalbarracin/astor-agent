@@ -13,6 +13,10 @@ export type {
   HabitPeriod,
   HabitLogStatus,
   RoutineKind,
+  StudyProgramKind,
+  StudyStatus,
+  TopicStatus,
+  ResourceKind,
 } from './types';
 
 export { createServiceClient, type AstorClient } from './client';

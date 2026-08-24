@@ -4,6 +4,8 @@
 
 ## Pendiente
 
+- **Mobile · Estudios/Enfoque**: falta el **Pomodoro mobile** y, en Estudios mobile, registrar horas +
+  recursos + agregar materia (web ya los tiene).
 - **Mobile · drag-reorder**: la pantalla mobile de Productividad es optimista y editable, pero
   reordenar arrastrando NO está (RN necesita reanimated / draggable-flatlist). En web está completo.
 - **Tareas · color en cards (Kanban)**: aplicar barra/acento de color por prioridad o categoría
