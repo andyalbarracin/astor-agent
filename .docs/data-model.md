@@ -27,9 +27,10 @@
 | 0008 | `0008_focus.sql` | 4 | `focus_sessions` (pomodoro, liga tarea/materia) |
 | 0009 | `0009_finance_core.sql` | 3 | `currencies`, `fx_rates`, `finance_categories`, `accounts`, `transactions` |
 | 0010 | `0010_net_worth.sql` | 3 | `net_worth_items` (estado financiero: activos/pasivos) |
-| 0011+ | (Fase 2/5) | — | `messaging_agent`, `agent_external_surface`, cuotas/tarjetas, workouts, integraciones |
+| 0011 | `0011_cards_installments.sql` | 3 | `credit_cards`, `card_invoices`, `installment_plans`, `installments`, `economic_rates` |
+| 0012+ | (Fase 2/5) | — | `messaging_agent`, `agent_external_surface`, workouts, integraciones |
 
-> Nota: los números de Fase 2/5 son indicativos (aún no existen). Reales hoy: 0000–0010.
+> Nota: los números de Fase 2/5 son indicativos (aún no existen). Reales hoy: 0000–0011.
 > Módulos: Estudios/Enfoque `.docs/modules/estudios-enfoque.md`; Finanzas `finanzas.md`;
 > IA interna `intelligence.md` + `llm-setup.md`.
 
@@ -91,9 +92,13 @@ para el usuario (guard trigger). Alta automática vía trigger sobre `auth.users
 - **`card_invoices`** — `credit_card_id` (fk), `period` (mes de resumen), `closing_date`,
   `due_date`, `total`, `paid` (bool).
 - **`installment_plans`** — total una vez: `description`, `total_amount`, `currency`,
-  `installments_count`, `first_charge_date`, `credit_card_id` (fk).
+  `installments_count`, `first_charge_date`, `credit_card_id` (fk, nullable),
+  `interest_rate` (TNA %, 0 = sin interés, informativo para CFT).
 - **`installments`** — generadas por el plan: `plan_id` (fk), `number`, `amount`,
-  `card_invoice_id` (fk; asignada por cierre/vencimiento), `status`. Generación idempotente en `core`.
+  `card_invoice_id` (fk; asignada por cierre/vencimiento), `status`
+  (`scheduled|charged|paid`). Generadas por `createInstallmentPlan` en `core`.
+- **`economic_rates`** — tasas públicas: `kind` (`inflacion_mensual`, `tna_ref`, …), `value` (%),
+  `source`, `as_of`. Alimenta el análisis "cuotas vs contado real".
 - **`budgets`** — `category_id` (fk), `period`, `amount`, `currency`.
 - **`recurring_entries`** — template de transacción + `recurrence_rule` (RRULE).
 

@@ -49,6 +49,22 @@
 - Monorepo: `metro.config.js` (watch del workspace + package exports) y `.npmrc` `node-linker=hoisted`
   (recomendado por Expo para pnpm).
 
+## Finanzas AR — Cuotas + Tarjetas ✅ (diferenciador)
+
+- **Migración `0011_cards_installments.sql`**: `credit_cards` (cierre/vencimiento ≠ mes calendario),
+  `card_invoices` (un resumen por tarjeta+período), `installment_plans` (total una vez + `interest_rate`
+  TNA informativa), `installments` (enum `installment_status`), `economic_rates` (inflación mensual /
+  tasas públicas) + RLS + triggers. Aplicada + seed juan (Visa Galicia cierre 22/vence 10, inflación 2,5%).
+- **Dominio** `packages/core/cards`: `createInstallmentPlan` implementa la **mecánica AR** — cargás el
+  total una vez y se generan N cuotas asignadas al resumen correcto según cierre/vencimiento (find-or-create
+  de `card_invoices` con luxon, la última cuota absorbe el redondeo, acumula el total del resumen).
+  Más `createCreditCard`/`listCreditCards`, `listInstallmentPlans` (con progreso pagadas/restante),
+  `listUpcomingInvoices` y `getInflacionMensual`. Única superficie → lista para Hermes/API.
+- **Web** `/finanzas/tarjetas`: próximos vencimientos, planes con barra de progreso, alta de tarjetas,
+  diálogo "Nuevo plan" (genera las cuotas) y calculadora liviana **¿cuotas o contado?** (valor presente
+  de las cuotas ajustado por inflación, veredicto de ahorro real — inspirada en infleta, sin desviarse
+  del foco). Link desde Finanzas.
+
 ## Finanzas — Estado financiero (patrimonio) ✅
 
 - **Migración `0010_net_worth.sql`**: `net_worth_items` (activos/pasivos, multimoneda) + RLS. Seed juan.

@@ -39,9 +39,18 @@
   kind (`expense|income|transfer`), note, source.
 
 ### Slices siguientes
-- 0010: `credit_cards`, `card_invoices`, `installment_plans`, `installments` (cuotas/tarjetas AR).
-- 0011: `net_worth_items` (activos/pasivos manuales) + vista Estado Financiero.
+- 0010: `net_worth_items` (activos/pasivos manuales) + vista Estado Financiero. ✅
+- 0011: `credit_cards`, `card_invoices`, `installment_plans`, `installments`, `economic_rates`
+  (cuotas/tarjetas AR + tasas). ✅
 - Fase 5: `webhook_endpoints`/`webhook_deliveries` (emitir eventos de finanzas).
+
+### Cuotas + tarjetas (0011)
+- **Mecánica**: `createInstallmentPlan` (core) toma el total una vez y genera N `installments`
+  asignadas al `card_invoice` del período correcto según **cierre/vencimiento** de la tarjeta
+  (cuota #1 en el resumen que contiene el primer consumo; siguientes en meses sucesivos).
+- `economic_rates` guarda inflación mensual / TNA de referencia (info pública por forma de pago).
+- Análisis liviano **cuotas vs contado real**: valor presente de las cuotas ajustado por inflación
+  (inspirado en infleta, sin construir la calculadora completa para no desviar el foco de la app).
 
 ## Dominio (packages/core/finance)
 

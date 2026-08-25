@@ -16,6 +16,10 @@ import {
   type CreateAccountInput,
   type CreateNetWorthItemInput,
   type UpdateNetWorthItemInput,
+  createCreditCard,
+  createInstallmentPlan,
+  type CreateCreditCardInput,
+  type CreateInstallmentPlanInput,
 } from '@astor/core';
 import { getDomainContext } from '@/lib/domain';
 
@@ -60,6 +64,13 @@ export async function updateNetWorthItemAction(id: string, patch: UpdateNetWorth
 }
 export async function deleteNetWorthItemAction(id: string) {
   return run((ctx) => deleteNetWorthItem(ctx, id));
+}
+
+export async function createCreditCardAction(input: CreateCreditCardInput) {
+  return run((ctx) => createCreditCard(ctx, input).then(() => undefined));
+}
+export async function createInstallmentPlanAction(input: CreateInstallmentPlanInput) {
+  return run((ctx) => createInstallmentPlan(ctx, input).then(() => undefined));
 }
 
 export async function importTransactionsAction(rows: CreateTransactionInput[]): Promise<ImportResult> {

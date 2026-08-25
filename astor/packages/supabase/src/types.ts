@@ -34,6 +34,7 @@ export type TransactionKind = 'expense' | 'income' | 'transfer';
 export type FinanceCatKind = 'expense' | 'income';
 export type TransactionSource = 'app' | 'import' | 'telegram' | 'api' | 'mcp';
 export type NetWorthKind = 'asset' | 'liability';
+export type InstallmentStatus = 'scheduled' | 'charged' | 'paid';
 
 export interface Database {
   public: {
@@ -482,6 +483,36 @@ export interface Database {
         Update: Partial<Database['public']['Tables']['net_worth_items']['Insert']>;
         Relationships: [];
       };
+      credit_cards: {
+        Row: { id: string; user_id: string; name: string; brand: string | null; bank: string | null; account_id: string | null; closing_day: number; due_day: number; created_at: string; updated_at: string };
+        Insert: { id?: string; user_id: string; name: string; brand?: string | null; bank?: string | null; account_id?: string | null; closing_day: number; due_day: number };
+        Update: Partial<Database['public']['Tables']['credit_cards']['Insert']>;
+        Relationships: [];
+      };
+      card_invoices: {
+        Row: { id: string; user_id: string; credit_card_id: string; period: string; closing_date: string; due_date: string; total: number; paid: boolean; created_at: string; updated_at: string };
+        Insert: { id?: string; user_id: string; credit_card_id: string; period: string; closing_date: string; due_date: string; total?: number; paid?: boolean };
+        Update: Partial<Database['public']['Tables']['card_invoices']['Insert']>;
+        Relationships: [];
+      };
+      installment_plans: {
+        Row: { id: string; user_id: string; credit_card_id: string | null; description: string; total_amount: number; currency: string; installments_count: number; first_charge_date: string; interest_rate: number; created_at: string; updated_at: string };
+        Insert: { id?: string; user_id: string; credit_card_id?: string | null; description: string; total_amount: number; currency?: string; installments_count: number; first_charge_date: string; interest_rate?: number };
+        Update: Partial<Database['public']['Tables']['installment_plans']['Insert']>;
+        Relationships: [];
+      };
+      installments: {
+        Row: { id: string; user_id: string; plan_id: string; number: number; amount: number; card_invoice_id: string | null; status: InstallmentStatus; created_at: string; updated_at: string };
+        Insert: { id?: string; user_id: string; plan_id: string; number: number; amount: number; card_invoice_id?: string | null; status?: InstallmentStatus };
+        Update: Partial<Database['public']['Tables']['installments']['Insert']>;
+        Relationships: [];
+      };
+      economic_rates: {
+        Row: { id: string; user_id: string; kind: string; value: number; source: string | null; as_of: string; created_at: string; updated_at: string };
+        Insert: { id?: string; user_id: string; kind: string; value: number; source?: string | null; as_of?: string };
+        Update: Partial<Database['public']['Tables']['economic_rates']['Insert']>;
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;
@@ -506,6 +537,7 @@ export interface Database {
       finance_cat_kind: FinanceCatKind;
       transaction_source: TransactionSource;
       net_worth_kind: NetWorthKind;
+      installment_status: InstallmentStatus;
     };
   };
 }
