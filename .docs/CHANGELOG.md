@@ -49,6 +49,21 @@
 - Monorepo: `metro.config.js` (watch del workspace + package exports) y `.npmrc` `node-linker=hoisted`
   (recomendado por Expo para pnpm).
 
+## Dashboard personalizable + Finanzas hub + Pomodoro con objetivo ✅
+
+- **Dashboard general personalizable**: los tiles por hub quedan fijos arriba; debajo, los widgets
+  analíticos (flujo 6m, hoy/hábitos, gastos por rubro, estudio semanal, foco de hoy, vencimientos)
+  se **reordenan por drag** (dnd-kit, `rectSortingStrategy`), se **quitan** (X al hover) y se
+  **agregan** desde un botón translúcido "Agregar widget". El layout se persiste en `localStorage`
+  (`astor-dashboard-layout`).
+- **Finanzas como hub real**: `/finanzas` ahora es un **overview** (stat-cards → módulos, flujo 6m,
+  donut por rubro, próximos vencimientos). El registro (ledger) se movió a **`/finanzas/registro`**;
+  el nav de meses y el sidebar apuntan ahí.
+- **Tema fijo dark**: se quitó el toggle de tema del sidebar; el layout raíz fija `data-theme="dark"`.
+- **Pomodoro**: tiempo **personalizado** (input de minutos además de 25/50) y **objetivo del bloque**
+  — elegís una **tarea del día** (de las secciones del planificador) o una **materia** (cuenta como
+  horas de estudio). El objetivo elegido se muestra en el timer.
+
 ## Pomodoro con sonido ✅
 
 - **Campana al terminar el foco** y chime suave al terminar el descanso, sintetizados con Web Audio
