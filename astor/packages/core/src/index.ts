@@ -149,6 +149,7 @@ export {
   createAccount,
   deleteAccount,
   getFinanceReport,
+  getSpendingReport,
   latestFxRates,
   listNetWorth,
   createNetWorthItem,
@@ -160,6 +161,7 @@ export {
   type Account,
   type FxRate,
   type FinanceReport,
+  type SpendingReport,
   type NetWorthItem,
   type NetWorthSummary,
 } from './finance/functions';

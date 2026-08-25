@@ -49,6 +49,16 @@
 - Monorepo: `metro.config.js` (watch del workspace + package exports) y `.npmrc` `node-linker=hoisted`
   (recomendado por Expo para pnpm).
 
+## Finanzas — Reportes de gastos ✅
+
+- **Dominio** `getSpendingReport(ctx, meses)`: análisis multi-mes (3/6/12) con tendencia por mes
+  (gastos/ingresos), gasto por rubro y **agrupación de conceptos repetidos** (normaliza la descripción,
+  ej. "gastos chino") con total + cantidad de veces. Tipo `SpendingReport`.
+- **Web** `/finanzas/reportes`: totales del período, **tendencia mensual** (barras recharts), donut por
+  rubro con leyenda, y **Top conteptos repetidos** (barras con conteo). Selector de rango 3/6/12 meses.
+- **Exportar PDF**: botón que usa `window.print()`; estilos `@media print` en `globals.css` ocultan el
+  chrome (sidebar/bottom-nav) y pasan el reporte a claro para un PDF limpio. Link desde Finanzas.
+
 ## Hubs + Finanzas AR — cuotas inline + MEP ✅
 
 - **Reestructura a hubs**: la navegación se agrupa en **Productividad** (Planificador, Tareas,

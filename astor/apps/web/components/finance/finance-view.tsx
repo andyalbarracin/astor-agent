@@ -86,6 +86,9 @@ export function FinanceView({
             <Link href="/finanzas/tarjetas">Tarjetas</Link>
           </Button>
           <Button asChild variant="secondary" size="sm">
+            <Link href="/finanzas/reportes">Reportes</Link>
+          </Button>
+          <Button asChild variant="secondary" size="sm">
             <Link href="/finanzas/patrimonio">Patrimonio</Link>
           </Button>
           <ImportDialog categories={categories} accounts={accounts} />

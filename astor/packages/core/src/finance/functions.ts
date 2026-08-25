@@ -193,6 +193,86 @@ export async function getFinanceReport(ctx: DomainContext, month: string): Promi
   };
 }
 
+// ── Reportes de gastos (análisis multi-mes) ───────────────────────────────
+
+export type SpendingReport = {
+  from: string;
+  to: string;
+  months: number;
+  totalExpense: number;
+  totalIncome: number;
+  count: number;
+  byMonth: { month: string; expense: number; income: number }[];
+  byCategory: { name: string; total: number }[];
+  topConcepts: { name: string; total: number; count: number }[];
+};
+
+/** Normaliza descripciones para agrupar gastos repetidos ("gastos chino"). */
+function normalizeConcept(desc: string): string {
+  return desc.trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+/**
+ * Análisis de gastos sobre los últimos N meses: tendencia mensual, por rubro y
+ * agrupación de conceptos repetidos (comercios/descripciones) con conteo.
+ */
+export async function getSpendingReport(ctx: DomainContext, months = 6): Promise<SpendingReport> {
+  const now = DateTime.now().setZone(ctx.timezone);
+  const from = now.minus({ months: months - 1 }).startOf('month').toISODate() ?? '';
+  const to = now.endOf('month').toISODate() ?? '';
+
+  const [{ data: txs, error }, { data: cats }] = await Promise.all([
+    ctx.supabase.from('transactions').select().gte('occurred_on', from).lte('occurred_on', to),
+    ctx.supabase.from('finance_categories').select('id,name'),
+  ]);
+  assertNoDbError(error);
+  const catName = new Map((cats ?? []).map((c) => [c.id, c.name]));
+
+  const byMonth = new Map<string, { expense: number; income: number }>();
+  for (let k = 0; k < months; k += 1) {
+    const m = now.minus({ months: months - 1 - k }).toFormat('yyyy-MM');
+    byMonth.set(m, { expense: 0, income: 0 });
+  }
+  const byCat = new Map<string, number>();
+  const concepts = new Map<string, { name: string; total: number; count: number }>();
+  let totalExpense = 0;
+  let totalIncome = 0;
+
+  for (const t of txs ?? []) {
+    const amount = Number(t.amount);
+    const m = (t.occurred_on ?? '').slice(0, 7);
+    const bucket = byMonth.get(m);
+    if (t.kind === 'income') {
+      totalIncome += amount;
+      if (bucket) bucket.income += amount;
+      continue;
+    }
+    totalExpense += amount;
+    if (bucket) bucket.expense += amount;
+    const cn = t.category_id ? (catName.get(t.category_id) ?? 'Sin rubro') : 'Sin rubro';
+    byCat.set(cn, (byCat.get(cn) ?? 0) + amount);
+    const key = normalizeConcept(t.description ?? '');
+    if (key) {
+      const c = concepts.get(key) ?? { name: t.description ?? key, total: 0, count: 0 };
+      c.total += amount;
+      c.count += 1;
+      concepts.set(key, c);
+    }
+  }
+
+  return {
+    from,
+    to,
+    months,
+    totalExpense,
+    totalIncome,
+    count: txs?.length ?? 0,
+    byMonth: [...byMonth].map(([month, v]) => ({ month, ...v })),
+    byCategory: [...byCat].map(([name, total]) => ({ name, total })).sort((a, b) => b.total - a.total),
+    topConcepts: [...concepts.values()].sort((a, b) => b.total - a.total).slice(0, 15),
+  };
+}
+
 // ── FX (blue / MEP / oficial) ─────────────────────────────────────────────
 
 export async function latestFxRates(ctx: DomainContext): Promise<Partial<Record<FxRateType, number>>> {

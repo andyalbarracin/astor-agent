@@ -50,3 +50,31 @@
     background-clip: content-box;
   }
 }
+
+/* ── Impresión / Exportar PDF (reportes en claro, sin chrome) ──────────── */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  html,
+  body {
+    background: #ffffff !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+  #print-report,
+  #print-report * {
+    color: #17242b !important;
+    border-color: #e2e2e2 !important;
+  }
+  #print-report .print-surface {
+    background: #ffffff !important;
+    box-shadow: none !important;
+  }
+  #print-report .text-fg-subtle,
+  #print-report .text-fg-subtlest {
+    color: #5b6b73 !important;
+  }
+}

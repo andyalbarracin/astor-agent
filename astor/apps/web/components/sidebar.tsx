@@ -95,7 +95,7 @@ export function Sidebar({ profile }: { profile: Profile }) {
   return (
     <aside
       className={cn(
-        'hidden shrink-0 flex-col border-r border-line-subtle bg-surface-base p-3 transition-[width] duration-200 lg:flex',
+        'hidden shrink-0 flex-col border-r border-line-subtle bg-surface-base p-3 transition-[width] duration-200 lg:flex print:hidden',
         collapsed ? 'w-[68px]' : 'w-[248px]',
       )}
     >

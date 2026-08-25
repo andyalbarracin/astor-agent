@@ -12,7 +12,7 @@ export function BottomNav() {
   const items = MOBILE_NAV.filter((i) => i.href).slice(0, 5); // hubs con ruta (máx 5 en mobile)
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 flex items-stretch justify-around border-t border-line-subtle bg-surface-raised pb-[env(safe-area-inset-bottom)] lg:hidden">
+    <nav className="fixed inset-x-0 bottom-0 z-40 flex items-stretch justify-around border-t border-line-subtle bg-surface-raised pb-[env(safe-area-inset-bottom)] lg:hidden print:hidden">
       {items.map((item) => {
         const Icon = icons[item.icon];
         const active = isActive(pathname, item.href);
