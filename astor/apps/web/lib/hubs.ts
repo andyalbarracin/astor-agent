@@ -37,7 +37,7 @@ export const HUBS: Hub[] = [
     href: '/finanzas',
     accent: '#7CC96A', // grass green (dinero)
     modules: [
-      { label: 'Registro', href: '/finanzas', icon: 'finance' },
+      { label: 'Registro', href: '/finanzas/registro', icon: 'finance' },
       { label: 'Tarjetas', href: '/finanzas/tarjetas', icon: 'card' },
       { label: 'Reportes', href: '/finanzas/reportes', icon: 'invest' },
       { label: 'Patrimonio', href: '/finanzas/patrimonio', icon: 'patrimonio' },

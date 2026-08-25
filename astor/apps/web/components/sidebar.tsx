@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { PanelLeftClose, PanelLeftOpen, ChevronRight } from 'lucide-react';
 import { icons, type IconName } from './icons';
-import { ThemeToggle } from './theme-toggle';
 import { PantherMark } from './brand/panther-mark';
 import { cn } from '@/lib/utils';
 import { HUBS, type Hub } from '@/lib/hubs';
@@ -120,7 +119,6 @@ export function Sidebar({ profile }: { profile: Profile }) {
             <p className="text-100 text-fg-subtlest">{profile.role === 'owner' ? 'Owner' : 'Usuario'}</p>
           </div>
         )}
-        {!collapsed && <ThemeToggle preference={profile.theme} />}
         <form action="/auth/signout" method="post">
           <button
             type="submit"

@@ -14,13 +14,25 @@ import { playBell, playSoftChime, primeAudio } from '@/lib/chime';
 const BREAK_MIN = 5;
 const FOCUS_OPTIONS = [25, 50];
 
-export function PomodoroTimer({ subjects }: { subjects: Subject[] }) {
+export interface FocusTodo {
+  id: string;
+  label: string;
+  section: string;
+}
+
+export function PomodoroTimer({ subjects, todos = [] }: { subjects: Subject[]; todos?: FocusTodo[] }) {
   const router = useRouter();
   const [focusMin, setFocusMin] = useState(25);
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
   const [secs, setSecs] = useState(25 * 60);
   const [running, setRunning] = useState(false);
-  const [subjectId, setSubjectId] = useState('none');
+  // target: 'none' | 'subj:<id>' | 'task:<id>'
+  const [target, setTarget] = useState('none');
+  const subjectId = target.startsWith('subj:') ? target.slice(5) : undefined;
+  const targetLabel =
+    target.startsWith('task:') ? todos.find((t) => `task:${t.id}` === target)?.label
+    : target.startsWith('subj:') ? subjects.find((s) => `subj:${s.id}` === target)?.name
+    : undefined;
   const [muted, setMuted] = useState(false);
 
   useEffect(() => {
@@ -51,7 +63,7 @@ export function PomodoroTimer({ subjects }: { subjects: Subject[] }) {
     setRunning(false);
     if (mode === 'focus') {
       if (!muted) playBell();
-      void logFocusSessionAction({ duration: focusMin, subjectId: subjectId === 'none' ? undefined : subjectId }).then(
+      void logFocusSessionAction({ duration: focusMin, subjectId }).then(
         (r) => {
           if (r.ok) {
             toast.success(`+${focusMin} min de foco`);
@@ -79,21 +91,36 @@ export function PomodoroTimer({ subjects }: { subjects: Subject[] }) {
 
   return (
     <div className="mx-auto flex max-w-md flex-col items-center rounded-lg border border-line-subtle bg-surface-raised p-8">
-      <div className="mb-6 inline-flex rounded-md border border-line-subtle p-1">
-        {FOCUS_OPTIONS.map((m) => (
-          <button
-            key={m}
-            type="button"
+      <div className="mb-6 flex items-center gap-2">
+        <div className="inline-flex rounded-md border border-line-subtle p-1">
+          {FOCUS_OPTIONS.map((m) => (
+            <button
+              key={m}
+              type="button"
+              disabled={running}
+              onClick={() => { setFocusMin(m); setMode('focus'); }}
+              className={cn(
+                'rounded px-3 py-1 text-200 font-medium transition-colors disabled:opacity-50',
+                focusMin === m && mode === 'focus' ? 'bg-surface-overlay text-fg-default' : 'text-fg-subtle',
+              )}
+            >
+              {m} min
+            </button>
+          ))}
+        </div>
+        <div className="inline-flex items-center gap-1 rounded-md border border-line-subtle px-2 py-1">
+          <input
+            type="number"
+            min={1}
+            max={180}
             disabled={running}
-            onClick={() => { setFocusMin(m); setMode('focus'); }}
-            className={cn(
-              'rounded px-3 py-1 text-200 font-medium transition-colors disabled:opacity-50',
-              focusMin === m && mode === 'focus' ? 'bg-surface-overlay text-fg-default' : 'text-fg-subtle',
-            )}
-          >
-            {m} min
-          </button>
-        ))}
+            value={focusMin}
+            onChange={(e) => { setFocusMin(Math.min(180, Math.max(1, Number(e.target.value) || 1))); setMode('focus'); }}
+            className="w-12 bg-transparent text-center text-200 font-medium text-fg-default outline-none disabled:opacity-50"
+            aria-label="Minutos personalizados"
+          />
+          <span className="text-100 text-fg-subtlest">min</span>
+        </div>
       </div>
 
       {/* Ring */}
@@ -117,6 +144,12 @@ export function PomodoroTimer({ subjects }: { subjects: Subject[] }) {
         </div>
       </div>
 
+      {targetLabel && (
+        <p className="mt-4 max-w-[18rem] truncate rounded-full bg-surface-overlay px-3 py-1 text-center text-100 text-fg-subtle">
+          {target.startsWith('task:') ? '🎯' : '📚'} {targetLabel}
+        </p>
+      )}
+
       <div className="mt-6 flex items-center gap-3">
         <Button variant="signature" size="lg" onClick={() => { primeAudio(); setRunning((r) => !r); }}>
           {running ? <Pause className="size-4" /> : <Play className="size-4" />}
@@ -131,14 +164,35 @@ export function PomodoroTimer({ subjects }: { subjects: Subject[] }) {
       </div>
 
       <div className="mt-6 w-full">
-        <Select value={subjectId} onValueChange={setSubjectId}>
-          <SelectTrigger><SelectValue placeholder="Sin materia" /></SelectTrigger>
+        <Select value={target} onValueChange={setTarget}>
+          <SelectTrigger><SelectValue placeholder="Sin objetivo" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="none">Sin materia (solo foco)</SelectItem>
-            {subjects.map((s) => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+            <SelectItem value="none">Sin objetivo (solo foco)</SelectItem>
+            {todos.length > 0 && (
+              <>
+                <div className="px-2 pb-1 pt-2 text-100 uppercase tracking-wide text-fg-subtlest">Tareas de hoy</div>
+                {todos.map((t) => (
+                  <SelectItem key={t.id} value={`task:${t.id}`}>
+                    {t.label} <span className="text-fg-subtlest">· {t.section}</span>
+                  </SelectItem>
+                ))}
+              </>
+            )}
+            {subjects.length > 0 && (
+              <>
+                <div className="px-2 pb-1 pt-2 text-100 uppercase tracking-wide text-fg-subtlest">Materias</div>
+                {subjects.map((s) => <SelectItem key={s.id} value={`subj:${s.id}`}>{s.name}</SelectItem>)}
+              </>
+            )}
           </SelectContent>
         </Select>
-        <p className="mt-2 text-100 text-fg-subtlest">Si elegís materia, el bloque cuenta como horas de estudio.</p>
+        <p className="mt-2 text-100 text-fg-subtlest">
+          {target.startsWith('subj:')
+            ? 'Cuenta como horas de estudio de esa materia.'
+            : target.startsWith('task:')
+              ? 'Foco para concretar esta tarea del día.'
+              : 'Elegí una tarea del día o una materia para enfocar el bloque.'}
+        </p>
       </div>
     </div>
   );

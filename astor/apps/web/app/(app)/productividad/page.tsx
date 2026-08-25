@@ -43,6 +43,11 @@ export default async function ProductividadPage() {
   const subjects = (subjectsRes.data ?? []) as Subject[];
   const habitsDone = new Set((logsRes.data ?? []).filter((l) => l.status === 'done').map((l) => l.habit_id)).size;
 
+  // Tareas pendientes del día (de las secciones) para enfocar en el Pomodoro.
+  const focusTodos = sections.flatMap((s) =>
+    s.items.filter((i) => !i.done).map((i) => ({ id: i.id, label: i.label, section: s.name })),
+  );
+
   const sortedRoutines = [...routines].sort(
     (a, b) => (KIND_ORDER[a.kind] ?? 1) - (KIND_ORDER[b.kind] ?? 1),
   );
@@ -66,7 +71,7 @@ export default async function ProductividadPage() {
               <h2 className="text-300 font-semibold text-fg-default">Enfoque</h2>
               <span className="text-100 text-fg-subtlest">{focusToday.totalMinutes} min hoy</span>
             </div>
-            <PomodoroTimer subjects={subjects} />
+            <PomodoroTimer subjects={subjects} todos={focusTodos} />
           </section>
         </div>
       </div>

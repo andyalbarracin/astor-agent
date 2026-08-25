@@ -48,7 +48,7 @@ export function FinanceView({
 
   function goMonth(delta: number) {
     const m = DateTime.fromISO(`${month}-01`).plus({ months: delta }).toFormat('yyyy-MM');
-    router.push(`/finanzas?month=${m}`);
+    router.push(`/finanzas/registro?month=${m}`);
   }
   function del(id: string) {
     deleteTransactionAction(id).then((r) => {
