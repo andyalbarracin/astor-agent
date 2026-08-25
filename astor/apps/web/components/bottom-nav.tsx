@@ -3,13 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { icons } from './icons';
-import { NAV, isActive } from './sidebar';
+import { MOBILE_NAV, isActive } from './sidebar';
 import { cn } from '@/lib/utils';
 
 /** Navbar inferior para pantallas < lg (tablet y mobile). */
 export function BottomNav() {
   const pathname = usePathname();
-  const items = NAV.filter((i) => i.href).slice(0, 5); // módulos construidos (máx 5 en mobile)
+  const items = MOBILE_NAV.filter((i) => i.href).slice(0, 5); // hubs con ruta (máx 5 en mobile)
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 flex items-stretch justify-around border-t border-line-subtle bg-surface-raised pb-[env(safe-area-inset-bottom)] lg:hidden">

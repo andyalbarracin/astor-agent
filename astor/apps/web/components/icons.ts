@@ -17,6 +17,11 @@ import {
   Sun,
   Moon,
   MonitorSmartphone,
+  CreditCard,
+  PiggyBank,
+  TrendingUp,
+  Lightbulb,
+  Utensils,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -29,6 +34,11 @@ export const icons = {
   workout: Dumbbell,
   study: BookOpen,
   focus: Timer,
+  card: CreditCard,
+  patrimonio: PiggyBank,
+  invest: TrendingUp,
+  idea: Lightbulb,
+  meal: Utensils,
   settings: Settings,
   signout: LogOut,
   themeLight: Sun,

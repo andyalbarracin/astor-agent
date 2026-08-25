@@ -10,21 +10,66 @@ import { PantherMark } from './brand/panther-mark';
 import { cn } from '@/lib/utils';
 import type { Profile } from '@/lib/profile';
 
-interface NavItem {
+export interface NavItem {
   label: string;
   icon: IconName;
   href?: string;
+  soon?: boolean;
 }
 
-export const NAV: NavItem[] = [
-  { label: 'Dashboard', icon: 'dashboard', href: '/' },
+export interface NavHub {
+  label: string;
+  icon: IconName;
+  items: NavItem[];
+}
+
+export const DASHBOARD: NavItem = { label: 'Dashboard', icon: 'dashboard', href: '/' };
+
+/** Astor organizado en hubs: cada hub agrupa módulos de ejecución. */
+export const HUBS: NavHub[] = [
+  {
+    label: 'Productividad',
+    icon: 'productivity',
+    items: [
+      { label: 'Planificador', icon: 'productivity', href: '/productividad' },
+      { label: 'Tareas', icon: 'task', href: '/tasks' },
+      { label: 'Hábitos', icon: 'habit', href: '/habits' },
+    ],
+  },
+  {
+    label: 'Finanzas',
+    icon: 'finance',
+    items: [
+      { label: 'Registro', icon: 'finance', href: '/finanzas' },
+      { label: 'Tarjetas', icon: 'card', href: '/finanzas/tarjetas' },
+      { label: 'Patrimonio', icon: 'patrimonio', href: '/finanzas/patrimonio' },
+      { label: 'Inversiones', icon: 'invest', soon: true },
+    ],
+  },
+  {
+    label: 'Conocimiento',
+    icon: 'study',
+    items: [
+      { label: 'Estudios', icon: 'study', href: '/estudios' },
+      { label: 'Ideas & Notas', icon: 'idea', soon: true },
+    ],
+  },
+  {
+    label: 'Movimiento',
+    icon: 'workout',
+    items: [
+      { label: 'Entrenos', icon: 'workout', soon: true },
+      { label: 'Recetas', icon: 'meal', soon: true },
+    ],
+  },
+];
+
+/** Destinos primarios para el bottom-nav mobile (hubs con ruta construida). */
+export const MOBILE_NAV: NavItem[] = [
+  DASHBOARD,
   { label: 'Productividad', icon: 'productivity', href: '/productividad' },
-  { label: 'Tareas', icon: 'task', href: '/tasks' },
-  { label: 'Hábitos', icon: 'habit', href: '/habits' },
   { label: 'Finanzas', icon: 'finance', href: '/finanzas' },
   { label: 'Estudios', icon: 'study', href: '/estudios' },
-  { label: 'Enfoque', icon: 'focus', href: '/enfoque' },
-  { label: 'Entrenamientos', icon: 'workout' },
 ];
 
 export function isActive(pathname: string, href?: string): boolean {
@@ -72,43 +117,23 @@ export function Sidebar({ profile }: { profile: Profile }) {
         </button>
       </div>
 
-      <nav className="mt-4 flex flex-1 flex-col gap-0.5">
-        {NAV.map((item) => {
-          const Icon = icons[item.icon];
-          const active = isActive(pathname, item.href);
-          const base = cn(
-            'flex items-center rounded-md text-300 transition-colors',
-            collapsed ? 'justify-center px-0 py-2.5' : 'gap-3 px-3 py-2',
-          );
-          if (!item.href) {
-            return (
-              <span key={item.label} className={cn(base, 'cursor-default text-fg-disabled')} title="Próximamente">
-                <Icon size={18} aria-hidden />
-                {!collapsed && (
-                  <>
-                    <span>{item.label}</span>
-                    <span className="ml-auto text-100 text-fg-subtlest">pronto</span>
-                  </>
-                )}
-              </span>
-            );
-          }
-          return (
-            <Link
-              key={item.label}
-              href={item.href}
-              title={collapsed ? item.label : undefined}
-              aria-current={active ? 'page' : undefined}
-              className={cn(
-                base,
-                active ? 'bg-surface-overlay font-medium text-fg-default' : 'text-fg-subtle hover:bg-surface-overlay hover:text-fg-default',
-              )}
-            >
-              <Icon size={18} aria-hidden className={active ? 'text-signature' : ''} />
-              {!collapsed && <span>{item.label}</span>}
-            </Link>
-          );
-        })}
+      <nav className="mt-4 flex flex-1 flex-col gap-0.5 overflow-y-auto">
+        <NavRow item={DASHBOARD} collapsed={collapsed} pathname={pathname} />
+
+        {HUBS.map((hub) => (
+          <div key={hub.label} className={cn(collapsed ? 'mt-2 border-t border-line-subtle pt-2' : 'mt-4')}>
+            {!collapsed && (
+              <p className="mb-1 flex items-center gap-2 px-3 text-100 font-semibold uppercase tracking-wider text-fg-subtlest">
+                {hub.label}
+              </p>
+            )}
+            <div className="flex flex-col gap-0.5">
+              {hub.items.map((item) => (
+                <NavRow key={item.label} item={item} collapsed={collapsed} pathname={pathname} />
+              ))}
+            </div>
+          </div>
+        ))}
       </nav>
 
       <div className="mt-4 flex flex-col gap-1 border-t border-line-subtle pt-4">
@@ -134,5 +159,41 @@ export function Sidebar({ profile }: { profile: Profile }) {
         </form>
       </div>
     </aside>
+  );
+}
+
+function NavRow({ item, collapsed, pathname }: { item: NavItem; collapsed: boolean; pathname: string }) {
+  const Icon = icons[item.icon];
+  const active = isActive(pathname, item.href);
+  const base = cn(
+    'flex items-center rounded-md text-300 transition-colors',
+    collapsed ? 'justify-center px-0 py-2.5' : 'gap-3 px-3 py-2',
+  );
+  if (!item.href) {
+    return (
+      <span className={cn(base, 'cursor-default text-fg-disabled')} title="Próximamente">
+        <Icon size={18} aria-hidden />
+        {!collapsed && (
+          <>
+            <span>{item.label}</span>
+            <span className="ml-auto text-100 text-fg-subtlest">pronto</span>
+          </>
+        )}
+      </span>
+    );
+  }
+  return (
+    <Link
+      href={item.href}
+      title={collapsed ? item.label : undefined}
+      aria-current={active ? 'page' : undefined}
+      className={cn(
+        base,
+        active ? 'bg-surface-overlay font-medium text-fg-default' : 'text-fg-subtle hover:bg-surface-overlay hover:text-fg-default',
+      )}
+    >
+      <Icon size={18} aria-hidden className={active ? 'text-signature' : ''} />
+      {!collapsed && <span>{item.label}</span>}
+    </Link>
   );
 }
