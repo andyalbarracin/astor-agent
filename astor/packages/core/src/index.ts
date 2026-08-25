@@ -25,6 +25,7 @@ export type {
   TransactionKind,
   FinanceCatKind,
   TransactionSource,
+  NetWorthKind,
 } from '@astor/supabase';
 
 // Tareas
@@ -148,9 +149,16 @@ export {
   deleteAccount,
   getFinanceReport,
   latestFxRates,
+  listNetWorth,
+  createNetWorthItem,
+  updateNetWorthItem,
+  deleteNetWorthItem,
+  getNetWorthSummary,
   type Transaction,
   type FinanceCategory,
   type Account,
   type FxRate,
   type FinanceReport,
+  type NetWorthItem,
+  type NetWorthSummary,
 } from './finance/functions';

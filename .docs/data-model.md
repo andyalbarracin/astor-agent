@@ -25,10 +25,13 @@
 | 0006 | `0006_todos.sql` | Prod. | `todo_sections`, `todo_items` (checklist seccionado editable) |
 | 0007 | `0007_studies.sql` | 4 | `study_programs`, `subjects`, `study_topics`, `study_sessions`, `study_resources` |
 | 0008 | `0008_focus.sql` | 4 | `focus_sessions` (pomodoro, liga tarea/materia) |
-| 0009+ | (Fase 2/3/5) | — | `messaging_agent`, `agent_external_surface`, finanzas, workouts, integraciones |
+| 0009 | `0009_finance_core.sql` | 3 | `currencies`, `fx_rates`, `finance_categories`, `accounts`, `transactions` |
+| 0010 | `0010_net_worth.sql` | 3 | `net_worth_items` (estado financiero: activos/pasivos) |
+| 0011+ | (Fase 2/5) | — | `messaging_agent`, `agent_external_surface`, cuotas/tarjetas, workouts, integraciones |
 
-> Nota: los números de Fase 2/3/5 son indicativos (aún no existen). Reales hoy: 0000–0008.
-> Modelo de Estudios/Enfoque: ver `.docs/modules/estudios-enfoque.md`.
+> Nota: los números de Fase 2/5 son indicativos (aún no existen). Reales hoy: 0000–0010.
+> Módulos: Estudios/Enfoque `.docs/modules/estudios-enfoque.md`; Finanzas `finanzas.md`;
+> IA interna `intelligence.md` + `llm-setup.md`.
 
 > Además: `seed.users.sql` (usuarios de prueba) y `seed.dev.sql` (datos dummy) — se corren a mano,
 > NO son migraciones de esquema. Todo el SQL vive en `.docs/migrations/`.

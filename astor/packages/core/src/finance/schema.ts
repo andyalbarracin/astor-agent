@@ -57,3 +57,22 @@ export const createAccountInput = z.object({
   currency: z.string().max(8).default('ARS'),
 });
 export type CreateAccountInput = z.input<typeof createAccountInput>;
+
+export const netWorthKindSchema = z.enum(['asset', 'liability']);
+
+export const createNetWorthItemInput = z.object({
+  kind: netWorthKindSchema,
+  groupName: z.string().trim().max(120).default('Otros'),
+  name: z.string().trim().min(1).max(200),
+  amount: z.number().finite().default(0),
+  currency: z.string().max(8).default('ARS'),
+});
+export type CreateNetWorthItemInput = z.input<typeof createNetWorthItemInput>;
+
+export const updateNetWorthItemInput = z.object({
+  groupName: z.string().trim().max(120).optional(),
+  name: z.string().trim().min(1).max(200).optional(),
+  amount: z.number().finite().optional(),
+  currency: z.string().max(8).optional(),
+});
+export type UpdateNetWorthItemInput = z.input<typeof updateNetWorthItemInput>;

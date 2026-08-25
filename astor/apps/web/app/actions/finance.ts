@@ -8,9 +8,14 @@ import {
   importTransactions,
   createFinanceCategory,
   createAccount,
+  createNetWorthItem,
+  updateNetWorthItem,
+  deleteNetWorthItem,
   type CreateTransactionInput,
   type UpdateTransactionInput,
   type CreateAccountInput,
+  type CreateNetWorthItemInput,
+  type UpdateNetWorthItemInput,
 } from '@astor/core';
 import { getDomainContext } from '@/lib/domain';
 
@@ -24,7 +29,7 @@ async function run(
   if (!ctx) return { ok: false, error: 'Sesión expirada.' };
   try {
     await fn(ctx);
-    revalidatePath('/finanzas');
+    revalidatePath('/finanzas', 'layout');
     revalidatePath('/');
     return { ok: true };
   } catch (e) {
@@ -46,6 +51,15 @@ export async function createFinanceCategoryAction(name: string) {
 }
 export async function createAccountAction(input: CreateAccountInput) {
   return run((ctx) => createAccount(ctx, input).then(() => undefined));
+}
+export async function createNetWorthItemAction(input: CreateNetWorthItemInput) {
+  return run((ctx) => createNetWorthItem(ctx, input).then(() => undefined));
+}
+export async function updateNetWorthItemAction(id: string, patch: UpdateNetWorthItemInput) {
+  return run((ctx) => updateNetWorthItem(ctx, id, patch));
+}
+export async function deleteNetWorthItemAction(id: string) {
+  return run((ctx) => deleteNetWorthItem(ctx, id));
 }
 
 export async function importTransactionsAction(rows: CreateTransactionInput[]): Promise<ImportResult> {

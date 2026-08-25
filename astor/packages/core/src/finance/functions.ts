@@ -8,17 +8,22 @@ import {
   listTransactionsFilter,
   createFinanceCategoryInput,
   createAccountInput,
+  createNetWorthItemInput,
+  updateNetWorthItemInput,
   type CreateTransactionInput,
   type UpdateTransactionInput,
   type ListTransactionsFilter,
   type CreateFinanceCategoryInput,
   type CreateAccountInput,
+  type CreateNetWorthItemInput,
+  type UpdateNetWorthItemInput,
 } from './schema';
 
 export type Transaction = Tables<'transactions'>;
 export type FinanceCategory = Tables<'finance_categories'>;
 export type Account = Tables<'accounts'>;
 export type FxRate = Tables<'fx_rates'>;
+export type NetWorthItem = Tables<'net_worth_items'>;
 
 function monthRange(month: string): { start: string; end: string } {
   const d = DateTime.fromISO(`${month}-01`);
@@ -196,4 +201,67 @@ export async function latestFxRates(ctx: DomainContext): Promise<Partial<Record<
   const latest: Partial<Record<FxRateType, number>> = {};
   for (const r of data ?? []) if (latest[r.rate_type] === undefined) latest[r.rate_type] = Number(r.rate);
   return latest;
+}
+
+// ── Estado financiero (patrimonio) ────────────────────────────────────────
+
+export async function listNetWorth(ctx: DomainContext): Promise<NetWorthItem[]> {
+  const { data, error } = await ctx.supabase
+    .from('net_worth_items')
+    .select()
+    .order('kind', { ascending: true })
+    .order('position', { ascending: true });
+  assertNoDbError(error);
+  return data ?? [];
+}
+
+export async function createNetWorthItem(ctx: DomainContext, input: CreateNetWorthItemInput): Promise<NetWorthItem> {
+  const d = createNetWorthItemInput.parse(input);
+  const { data, error } = await ctx.supabase
+    .from('net_worth_items')
+    .insert({ user_id: ctx.userId, kind: d.kind, group_name: d.groupName, name: d.name, amount: d.amount, currency: d.currency })
+    .select().single();
+  assertNoDbError(error);
+  return data!;
+}
+
+export async function updateNetWorthItem(ctx: DomainContext, id: string, patch: UpdateNetWorthItemInput): Promise<void> {
+  const d = updateNetWorthItemInput.parse(patch);
+  const { error } = await ctx.supabase
+    .from('net_worth_items')
+    .update({
+      ...(d.groupName !== undefined ? { group_name: d.groupName } : {}),
+      ...(d.name !== undefined ? { name: d.name } : {}),
+      ...(d.amount !== undefined ? { amount: d.amount } : {}),
+      ...(d.currency !== undefined ? { currency: d.currency } : {}),
+    })
+    .eq('id', id);
+  assertNoDbError(error);
+}
+
+export async function deleteNetWorthItem(ctx: DomainContext, id: string): Promise<void> {
+  const { error } = await ctx.supabase.from('net_worth_items').delete().eq('id', id);
+  assertNoDbError(error);
+}
+
+export type NetWorthSummary = {
+  items: NetWorthItem[];
+  assetsTotal: number;
+  liabilitiesTotal: number;
+  net: number;
+  blueRate: number;
+};
+
+/** Patrimonio: convierte USD→ARS por blue y calcula activos, pasivos y neto. */
+export async function getNetWorthSummary(ctx: DomainContext): Promise<NetWorthSummary> {
+  const [items, rates] = await Promise.all([listNetWorth(ctx), latestFxRates(ctx)]);
+  const blue = rates.blue ?? rates.mep ?? rates.oficial ?? 1;
+  const arsValue = (i: NetWorthItem) => (i.currency === 'USD' ? Number(i.amount) * blue : Number(i.amount));
+  let assetsTotal = 0;
+  let liabilitiesTotal = 0;
+  for (const i of items) {
+    if (i.kind === 'asset') assetsTotal += arsValue(i);
+    else liabilitiesTotal += arsValue(i);
+  }
+  return { items, assetsTotal, liabilitiesTotal, net: assetsTotal - liabilitiesTotal, blueRate: blue };
 }

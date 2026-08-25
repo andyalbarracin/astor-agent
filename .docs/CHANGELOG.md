@@ -49,6 +49,15 @@
 - Monorepo: `metro.config.js` (watch del workspace + package exports) y `.npmrc` `node-linker=hoisted`
   (recomendado por Expo para pnpm).
 
+## Finanzas — Estado financiero (patrimonio) ✅
+
+- **Migración `0010_net_worth.sql`**: `net_worth_items` (activos/pasivos, multimoneda) + RLS. Seed juan.
+- **Dominio**: net worth CRUD + `getNetWorthSummary` (convierte USD→ARS por blue → activos, pasivos,
+  patrimonio neto).
+- **Web** `/finanzas/patrimonio`: cards (patrimonio neto en degradé, activos, pasivos, flujo del mes) +
+  dos columnas (Activos/Pasivos) agrupadas por grupo, con alta/baja de ítems. Link desde Finanzas.
+- Docs IA: `.docs/modules/llm-setup.md` (providers, URLs de keys, modelos) + `intelligence.md`.
+
 ## Finanzas AR — registro + reportes + import (web) ✅
 
 - **Migración `0009_finance_core.sql`**: `currencies`, `fx_rates` (blue/MEP/oficial),

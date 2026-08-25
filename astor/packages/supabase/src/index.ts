@@ -22,6 +22,7 @@ export type {
   TransactionKind,
   FinanceCatKind,
   TransactionSource,
+  NetWorthKind,
 } from './types';
 
 export { createServiceClient, type AstorClient } from './client';

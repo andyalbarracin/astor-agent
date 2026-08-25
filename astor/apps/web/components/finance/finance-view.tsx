@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { DateTime } from 'luxon';
@@ -81,6 +82,9 @@ export function FinanceView({
               <TrendingUp className="size-3.5 text-success-default" /> blue ${fxBlue.toLocaleString('es-AR')}
             </span>
           )}
+          <Button asChild variant="secondary" size="sm">
+            <Link href="/finanzas/patrimonio">Patrimonio</Link>
+          </Button>
           <ImportDialog categories={categories} accounts={accounts} />
           <AddTransactionDialog categories={categories} accounts={accounts} timezone={timezone} defaultMonth={month} />
         </div>

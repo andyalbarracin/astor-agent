@@ -33,6 +33,7 @@ export type FxRateType = 'oficial' | 'blue' | 'mep';
 export type TransactionKind = 'expense' | 'income' | 'transfer';
 export type FinanceCatKind = 'expense' | 'income';
 export type TransactionSource = 'app' | 'import' | 'telegram' | 'api' | 'mcp';
+export type NetWorthKind = 'asset' | 'liability';
 
 export interface Database {
   public: {
@@ -469,6 +470,18 @@ export interface Database {
         Update: Partial<Database['public']['Tables']['transactions']['Insert']>;
         Relationships: [];
       };
+      net_worth_items: {
+        Row: {
+          id: string; user_id: string; kind: NetWorthKind; group_name: string; name: string;
+          amount: number; currency: string; position: number; created_at: string; updated_at: string;
+        };
+        Insert: {
+          id?: string; user_id: string; kind: NetWorthKind; group_name?: string; name: string;
+          amount?: number; currency?: string; position?: number;
+        };
+        Update: Partial<Database['public']['Tables']['net_worth_items']['Insert']>;
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;
@@ -492,6 +505,7 @@ export interface Database {
       transaction_kind: TransactionKind;
       finance_cat_kind: FinanceCatKind;
       transaction_source: TransactionSource;
+      net_worth_kind: NetWorthKind;
     };
   };
 }
