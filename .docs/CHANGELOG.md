@@ -49,6 +49,12 @@
 - Monorepo: `metro.config.js` (watch del workspace + package exports) y `.npmrc` `node-linker=hoisted`
   (recomendado por Expo para pnpm).
 
+## Pomodoro con sonido ✅
+
+- **Campana al terminar el foco** y chime suave al terminar el descanso, sintetizados con Web Audio
+  (`lib/chime.ts`) — libres, sin assets ni red, offline. Botón de silenciar (persistido en
+  localStorage); el audio se desbloquea con el click de "Empezar".
+
 ## Hubs reales + Dashboard con impacto + fondo negro ✅
 
 - **Fondo negro neutro**: se reemplazó el Onyx teal (#0A171D) por negro neutro (#0A0A0C base,

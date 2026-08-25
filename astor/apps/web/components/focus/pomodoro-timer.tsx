@@ -2,13 +2,14 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Play, Pause, RotateCcw } from 'lucide-react';
+import { Play, Pause, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Subject } from '@astor/core';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { logFocusSessionAction } from '@/app/actions/focus';
+import { playBell, playSoftChime, primeAudio } from '@/lib/chime';
 
 const BREAK_MIN = 5;
 const FOCUS_OPTIONS = [25, 50];
@@ -20,6 +21,19 @@ export function PomodoroTimer({ subjects }: { subjects: Subject[] }) {
   const [secs, setSecs] = useState(25 * 60);
   const [running, setRunning] = useState(false);
   const [subjectId, setSubjectId] = useState('none');
+  const [muted, setMuted] = useState(false);
+
+  useEffect(() => {
+    setMuted(localStorage.getItem('astor-pomodoro-muted') === '1');
+  }, []);
+  function toggleMute() {
+    setMuted((m) => {
+      const next = !m;
+      localStorage.setItem('astor-pomodoro-muted', next ? '1' : '0');
+      if (!next) primeAudio();
+      return next;
+    });
+  }
 
   // Reset al cambiar duración/modo mientras está pausado.
   useEffect(() => {
@@ -36,6 +50,7 @@ export function PomodoroTimer({ subjects }: { subjects: Subject[] }) {
   const complete = useCallback(() => {
     setRunning(false);
     if (mode === 'focus') {
+      if (!muted) playBell();
       void logFocusSessionAction({ duration: focusMin, subjectId: subjectId === 'none' ? undefined : subjectId }).then(
         (r) => {
           if (r.ok) {
@@ -47,10 +62,11 @@ export function PomodoroTimer({ subjects }: { subjects: Subject[] }) {
       setMode('break');
       setSecs(BREAK_MIN * 60);
     } else {
+      if (!muted) playSoftChime();
       setMode('focus');
       setSecs(focusMin * 60);
     }
-  }, [mode, focusMin, subjectId, router]);
+  }, [mode, focusMin, subjectId, router, muted]);
 
   useEffect(() => {
     if (running && secs === 0) complete();
@@ -102,12 +118,15 @@ export function PomodoroTimer({ subjects }: { subjects: Subject[] }) {
       </div>
 
       <div className="mt-6 flex items-center gap-3">
-        <Button variant="signature" size="lg" onClick={() => setRunning((r) => !r)}>
+        <Button variant="signature" size="lg" onClick={() => { primeAudio(); setRunning((r) => !r); }}>
           {running ? <Pause className="size-4" /> : <Play className="size-4" />}
           {running ? 'Pausar' : 'Empezar'}
         </Button>
         <Button variant="ghost" size="icon" onClick={() => { setRunning(false); setSecs((mode === 'focus' ? focusMin : BREAK_MIN) * 60); }}>
           <RotateCcw className="size-4" />
+        </Button>
+        <Button variant="ghost" size="icon" onClick={toggleMute} title={muted ? 'Activar sonido' : 'Silenciar'} aria-label={muted ? 'Activar sonido' : 'Silenciar'}>
+          {muted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
         </Button>
       </div>
 
