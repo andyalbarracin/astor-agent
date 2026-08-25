@@ -28,6 +28,11 @@ export type StudyProgramKind = 'curso' | 'carrera' | 'examen' | 'otro';
 export type StudyStatus = 'active' | 'paused' | 'done' | 'archived';
 export type TopicStatus = 'todo' | 'learning' | 'learned';
 export type ResourceKind = 'video' | 'pdf' | 'link' | 'playlist' | 'book' | 'otro';
+export type AccountType = 'efectivo' | 'banco' | 'billetera' | 'tarjeta_credito' | 'tarjeta_debito' | 'usd' | 'otro';
+export type FxRateType = 'oficial' | 'blue' | 'mep';
+export type TransactionKind = 'expense' | 'income' | 'transfer';
+export type FinanceCatKind = 'expense' | 'income';
+export type TransactionSource = 'app' | 'import' | 'telegram' | 'api' | 'mcp';
 
 export interface Database {
   public: {
@@ -425,6 +430,45 @@ export interface Database {
         Update: Partial<Database['public']['Tables']['focus_sessions']['Insert']>;
         Relationships: [];
       };
+      currencies: {
+        Row: { id: string; user_id: string; code: string; symbol: string | null; decimals: number; created_at: string; updated_at: string };
+        Insert: { id?: string; user_id: string; code: string; symbol?: string | null; decimals?: number };
+        Update: Partial<Database['public']['Tables']['currencies']['Insert']>;
+        Relationships: [];
+      };
+      fx_rates: {
+        Row: { id: string; user_id: string; base: string; quote: string; rate: number; rate_type: FxRateType; source: string | null; as_of: string; created_at: string; updated_at: string };
+        Insert: { id?: string; user_id: string; base: string; quote: string; rate: number; rate_type?: FxRateType; source?: string | null; as_of?: string };
+        Update: Partial<Database['public']['Tables']['fx_rates']['Insert']>;
+        Relationships: [];
+      };
+      finance_categories: {
+        Row: { id: string; user_id: string; name: string; kind: FinanceCatKind; color: string | null; position: number; created_at: string; updated_at: string };
+        Insert: { id?: string; user_id: string; name: string; kind?: FinanceCatKind; color?: string | null; position?: number };
+        Update: Partial<Database['public']['Tables']['finance_categories']['Insert']>;
+        Relationships: [];
+      };
+      accounts: {
+        Row: { id: string; user_id: string; name: string; type: AccountType; currency: string; opening_balance: number; position: number; created_at: string; updated_at: string };
+        Insert: { id?: string; user_id: string; name: string; type?: AccountType; currency?: string; opening_balance?: number; position?: number };
+        Update: Partial<Database['public']['Tables']['accounts']['Insert']>;
+        Relationships: [];
+      };
+      transactions: {
+        Row: {
+          id: string; user_id: string; description: string; amount: number; currency: string;
+          fx_rate: number | null; category_id: string | null; account_id: string | null;
+          occurred_on: string; kind: TransactionKind; note: string | null; source: TransactionSource;
+          created_at: string; updated_at: string;
+        };
+        Insert: {
+          id?: string; user_id: string; description: string; amount: number; currency?: string;
+          fx_rate?: number | null; category_id?: string | null; account_id?: string | null;
+          occurred_on?: string; kind?: TransactionKind; note?: string | null; source?: TransactionSource;
+        };
+        Update: Partial<Database['public']['Tables']['transactions']['Insert']>;
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;
@@ -443,6 +487,11 @@ export interface Database {
       study_status: StudyStatus;
       topic_status: TopicStatus;
       resource_kind: ResourceKind;
+      account_type: AccountType;
+      fx_rate_type: FxRateType;
+      transaction_kind: TransactionKind;
+      finance_cat_kind: FinanceCatKind;
+      transaction_source: TransactionSource;
     };
   };
 }

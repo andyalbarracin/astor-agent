@@ -49,6 +49,20 @@
 - Monorepo: `metro.config.js` (watch del workspace + package exports) y `.npmrc` `node-linker=hoisted`
   (recomendado por Expo para pnpm).
 
+## Finanzas AR — registro + reportes + import (web) ✅
+
+- **Migración `0009_finance_core.sql`**: `currencies`, `fx_rates` (blue/MEP/oficial),
+  `finance_categories` (rubros), `accounts` (formas de pago/billeteras), `transactions` (con
+  `source` para trazabilidad de agente) + RLS + realtime. Aplicada + seed de juan (basado en su Excel).
+- **Dominio** `packages/core/finance`: transacciones (CRUD + `importTransactions` masivo), rubros,
+  cuentas, `getFinanceReport` (pivots por rubro/forma de pago), `latestFxRates`. Única superficie →
+  lista para Hermes/API/webhooks.
+- **Web** `/finanzas`: nav de mes + hero card en degradé + totales (gastos/ingresos/neto, dual $/USD
+  blue) + registro de movimientos + **donut de gastos por rubro** (recharts) + barras por forma de
+  pago + **import CSV/XLS** (xlsx, auto-mapeo de columnas + preview). Dark-first, con data-viz.
+- Pendiente/próximo: cuotas/tarjetas AR, estado financiero (activos/pasivos/patrimonio), mobile,
+  Settings con API key de LLM (Groq/Gemini/OpenAI) para IA interna, y "Campus Intelligence".
+
 ## Estudios + Enfoque — módulo (web + mobile Estudios) ✅
 
 - **Dominio** `packages/core/{studies,focus}`: programas con progreso, materias, temas

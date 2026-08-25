@@ -20,6 +20,11 @@ export type {
   StudyStatus,
   TopicStatus,
   ResourceKind,
+  AccountType,
+  FxRateType,
+  TransactionKind,
+  FinanceCatKind,
+  TransactionSource,
 } from '@astor/supabase';
 
 // Tareas
@@ -126,3 +131,26 @@ export {
 // Enfoque (Pomodoro)
 export * from './focus/schema';
 export { logFocusSession, getFocusToday, type FocusSession } from './focus/functions';
+
+// Finanzas
+export * from './finance/schema';
+export {
+  listTransactions,
+  createTransaction,
+  updateTransaction,
+  deleteTransaction,
+  importTransactions,
+  listFinanceCategories,
+  createFinanceCategory,
+  deleteFinanceCategory,
+  listAccounts,
+  createAccount,
+  deleteAccount,
+  getFinanceReport,
+  latestFxRates,
+  type Transaction,
+  type FinanceCategory,
+  type Account,
+  type FxRate,
+  type FinanceReport,
+} from './finance/functions';

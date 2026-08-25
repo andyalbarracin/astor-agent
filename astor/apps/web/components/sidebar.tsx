@@ -21,9 +21,9 @@ export const NAV: NavItem[] = [
   { label: 'Productividad', icon: 'productivity', href: '/productividad' },
   { label: 'Tareas', icon: 'task', href: '/tasks' },
   { label: 'Hábitos', icon: 'habit', href: '/habits' },
+  { label: 'Finanzas', icon: 'finance', href: '/finanzas' },
   { label: 'Estudios', icon: 'study', href: '/estudios' },
   { label: 'Enfoque', icon: 'focus', href: '/enfoque' },
-  { label: 'Finanzas', icon: 'finance' },
   { label: 'Entrenamientos', icon: 'workout' },
 ];
 

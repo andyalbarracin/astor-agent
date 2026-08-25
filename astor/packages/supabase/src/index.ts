@@ -17,6 +17,11 @@ export type {
   StudyStatus,
   TopicStatus,
   ResourceKind,
+  AccountType,
+  FxRateType,
+  TransactionKind,
+  FinanceCatKind,
+  TransactionSource,
 } from './types';
 
 export { createServiceClient, type AstorClient } from './client';
