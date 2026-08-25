@@ -78,3 +78,18 @@
     color: #5b6b73 !important;
   }
 }
+
+/* ── Micro-animaciones de dashboard (entrada + hover), sin librerías ──────── */
+@keyframes astor-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes astor-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.astor-rise { animation: astor-rise 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+.astor-fade { animation: astor-fade 0.8s ease both; }
+@media (prefers-reduced-motion: reduce) {
+  .astor-rise, .astor-fade { animation: none; }
+}

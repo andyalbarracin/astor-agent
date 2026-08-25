@@ -1,7 +1,7 @@
 /**
  * Colores semánticos (light / dark).
- * Paleta base: Onyx #0A171D · Wheat #FFF6E9 · Oceanic #003F47 · Nectarine #FFBD76
- * + verde césped como acento. Fuente de verdad; sincronizado con
+ * Paleta base: negro neutro #0A0A0C (dark) · Wheat #FFF6E9 (light) · Oceanic #003F47 ·
+ * Nectarine #FFBD76 + verde césped, usados SOLO como acentos. Fuente de verdad; sincronizado con
  * .docs/visual-design/tokens.reference.md.
  * Los componentes NUNCA usan hex crudo: consumen estos tokens.
  */
@@ -13,23 +13,23 @@ export interface ColorValue {
 }
 
 export const color = {
-  // Superficies: Onyx en dark, Wheat en light.
+  // Superficies: negro neutro en dark (los colores son acentos), Wheat en light.
   surface: {
-    base: { light: '#FFF6E9', dark: '#0A171D' },
-    raised: { light: '#FFFFFF', dark: '#10222B' },
-    overlay: { light: '#FFFFFF', dark: '#18303A' },
-    sunken: { light: '#F6EAD5', dark: '#060F14' },
+    base: { light: '#FFF6E9', dark: '#0A0A0C' },
+    raised: { light: '#FFFFFF', dark: '#131317' },
+    overlay: { light: '#FFFFFF', dark: '#1C1C22' },
+    sunken: { light: '#F6EAD5', dark: '#060607' },
   },
   text: {
-    default: { light: '#0A171D', dark: '#EAF1F4' },
-    subtle: { light: '#45565E', dark: '#9FB2BC' },
-    subtlest: { light: '#6B7C84', dark: '#6E8591' },
-    inverse: { light: '#FFF6E9', dark: '#0A171D' },
-    disabled: { light: '#9AA7AD', dark: '#4E626D' },
+    default: { light: '#0A171D', dark: '#ECECEF' },
+    subtle: { light: '#45565E', dark: '#A6A6AD' },
+    subtlest: { light: '#6B7C84', dark: '#70707A' },
+    inverse: { light: '#FFF6E9', dark: '#0A0A0C' },
+    disabled: { light: '#9AA7AD', dark: '#4C4C54' },
   },
   border: {
-    default: { light: '#E4D8C2', dark: '#21343E' },
-    subtle: { light: '#EFE6D5', dark: '#152833' },
+    default: { light: '#E4D8C2', dark: '#2A2A31' },
+    subtle: { light: '#EFE6D5', dark: '#1D1D22' },
     focus: { light: '#007A8A', dark: '#3FA9B8' },
   },
   // Brand: Oceanic (teal). En dark se aclara para contraste.

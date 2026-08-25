@@ -1,9 +1,17 @@
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { DateTime } from 'luxon';
-import { ArrowUpRight, Flame } from 'lucide-react';
-import { listTasks, listHabits } from '@astor/core';
+import {
+  listTasks,
+  listHabits,
+  getFocusToday,
+  getSpendingReport,
+  getNetWorthSummary,
+  listUpcomingInvoices,
+  getStudyOverview,
+  listProgramsWithProgress,
+} from '@astor/core';
 import { getDomainContext } from '@/lib/domain';
+import { DashboardOverview, type OverviewData } from '@/components/dashboard/overview';
 
 function greeting(hour: number): string {
   if (hour < 6) return 'Buenas noches';
@@ -11,6 +19,8 @@ function greeting(hour: number): string {
   if (hour < 20) return 'Buenas tardes';
   return 'Buenas noches';
 }
+
+const mlabel = (m: string) => DateTime.fromISO(`${m}-01`).setLocale('es').toFormat('LLL');
 
 export default async function DashboardPage() {
   const ctx = await getDomainContext();
@@ -20,124 +30,84 @@ export default async function DashboardPage() {
   const today = now.startOf('day');
   const todayKey = today.toISODate() ?? '';
 
-  const [tasks, habits] = await Promise.all([listTasks(ctx, { status: ['todo', 'doing'] }), listHabits(ctx)]);
-  const { data: todayLogs } = await ctx.supabase.from('habit_logs').select().eq('date', todayKey);
-  const logStatus = new Map((todayLogs ?? []).map((l) => [l.habit_id, l.status]));
+  const [tasks, habits, focusToday, spending, netWorth, invoices, study, programs, profileRes, logsRes] =
+    await Promise.all([
+      listTasks(ctx, { status: ['todo', 'doing'] }),
+      listHabits(ctx),
+      getFocusToday(ctx),
+      getSpendingReport(ctx, 6),
+      getNetWorthSummary(ctx),
+      listUpcomingInvoices(ctx),
+      getStudyOverview(ctx),
+      listProgramsWithProgress(ctx),
+      ctx.supabase.from('profiles').select('display_name').eq('user_id', ctx.userId).single(),
+      ctx.supabase.from('habit_logs').select().eq('date', todayKey),
+    ]);
+
+  const logStatus = new Map((logsRes.data ?? []).map((l) => [l.habit_id, l.status]));
+  const habitsDone = habits.filter((h) => logStatus.get(h.id) === 'done').length;
 
   const focus = tasks
     .filter((t) => t.status === 'doing' || (t.due_at && DateTime.fromISO(t.due_at) <= today.endOf('day')))
-    .slice(0, 7);
+    .slice(0, 6)
+    .map((t) => {
+      const due = t.due_at ? DateTime.fromISO(t.due_at, { zone: ctx.timezone }).startOf('day') : null;
+      const overdue = due ? due < today : false;
+      return {
+        title: t.title,
+        doing: t.status === 'doing',
+        overdue,
+        dueLabel: due ? (overdue ? 'vencida' : due.equals(today) ? 'hoy' : due.setLocale('es-AR').toFormat('d LLL')) : null,
+      };
+    });
 
-  const pending = habits.filter((h) => logStatus.get(h.id) !== 'done').length;
-  const nombre = ctx.userId ? ((await ctx.supabase.from('profiles').select('display_name').eq('user_id', ctx.userId).single()).data?.display_name?.split(' ')[0] ?? '') : '';
+  const upcoming = invoices
+    .filter((v) => DateTime.fromISO(v.due_date) >= today.minus({ days: 1 }))
+    .slice(0, 5)
+    .map((v) => ({
+      cardName: v.cardName,
+      total: Number(v.total),
+      dueLabel: DateTime.fromISO(v.due_date).setLocale('es').toFormat('dd LLL'),
+      periodLabel: DateTime.fromISO(v.period).setLocale('es').toFormat('LLLL'),
+    }));
 
-  return (
-    <div className="mx-auto max-w-[1000px]">
-      <header className="mb-8">
-        <h1 className="text-800 font-bold tracking-[-0.02em] text-fg-default">
-          {greeting(now.hour)}
-          {nombre ? `, ${nombre}` : ''}.
-        </h1>
-        <p className="mt-1 text-300 capitalize text-fg-subtle">
-          {today.toLocaleString(DateTime.DATE_HUGE)}
-        </p>
-      </header>
+  // Próximo examen: programa con target_date más cercano en el futuro.
+  const nextExam = programs
+    .filter((pr) => pr.target_date)
+    .map((pr) => ({ name: pr.name, date: DateTime.fromISO(pr.target_date!), progress: pr.progress }))
+    .filter((pr) => pr.date >= today.minus({ days: 1 }))
+    .sort((a, b) => a.date.toMillis() - b.date.toMillis())[0];
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.4fr_1fr]">
-        {/* Foco de hoy */}
-        <section className="rounded-lg border border-line-subtle bg-surface-raised">
-          <div className="flex items-center justify-between border-b border-line-subtle px-5 py-4">
-            <h2 className="text-400 font-semibold text-fg-default">Foco de hoy</h2>
-            <Link
-              href="/tasks"
-              className="inline-flex items-center gap-1 text-200 text-fg-subtle transition-colors hover:text-fg-default"
-            >
-              Tareas <ArrowUpRight className="size-3.5" />
-            </Link>
-          </div>
-          <div className="divide-y divide-line-subtle">
-            {focus.length === 0 && (
-              <p className="px-5 py-8 text-center text-200 text-fg-subtlest">
-                Nada urgente para hoy. Buen momento para avanzar lo importante.
-              </p>
-            )}
-            {focus.map((t) => {
-              const due = t.due_at ? DateTime.fromISO(t.due_at, { zone: ctx.timezone }).startOf('day') : null;
-              const overdue = due ? due < today : false;
-              return (
-                <Link
-                  key={t.id}
-                  href="/tasks"
-                  className="flex items-center gap-3 px-5 py-3 transition-colors hover:bg-surface-overlay"
-                >
-                  <span
-                    className={`size-2 shrink-0 rounded-full ${
-                      t.status === 'doing' ? 'bg-signature' : 'bg-fg-subtlest'
-                    }`}
-                  />
-                  <span className="min-w-0 flex-1 truncate text-300 text-fg-default">{t.title}</span>
-                  {due && (
-                    <span className={`text-100 ${overdue ? 'text-danger-text' : 'text-fg-subtlest'}`}>
-                      {overdue ? 'vencida' : due.equals(today) ? 'hoy' : due.setLocale('es-AR').toFormat('d LLL')}
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
-          </div>
-        </section>
+  const data: OverviewData = {
+    greetingWord: greeting(now.hour),
+    name: profileRes.data?.display_name?.split(' ')[0] ?? '',
+    dateLabel: today.toLocaleString(DateTime.DATE_HUGE),
+    productivity: {
+      tasksPending: tasks.length,
+      habitsDone,
+      habitsTotal: habits.length,
+      focusMin: focusToday.totalMinutes,
+      focus,
+    },
+    finance: {
+      expense: spending.byMonth.at(-1)?.expense ?? 0,
+      income: spending.byMonth.at(-1)?.income ?? 0,
+      net: (spending.byMonth.at(-1)?.income ?? 0) - (spending.byMonth.at(-1)?.expense ?? 0),
+      netWorth: netWorth.net,
+      trend: spending.byMonth.map((m) => ({ label: mlabel(m.month), expense: m.expense, income: m.income })),
+      byCategory: spending.byCategory,
+      upcoming,
+    },
+    knowledge: {
+      weekHours: Math.round((study.weekMinutes / 60) * 10) / 10,
+      learnedTopics: study.learnedTopics,
+      activePrograms: study.activePrograms,
+      weekly: study.weekly,
+      nextExam: nextExam
+        ? { name: nextExam.name, daysLeft: Math.ceil(nextExam.date.diff(today, 'days').days), progress: nextExam.progress }
+        : null,
+    },
+  };
 
-        {/* Hábitos de hoy */}
-        <section className="rounded-lg border border-line-subtle bg-surface-raised">
-          <div className="flex items-center justify-between border-b border-line-subtle px-5 py-4">
-            <h2 className="text-400 font-semibold text-fg-default">
-              Hábitos
-              {pending > 0 && (
-                <span className="ml-2 rounded-full bg-signature-soft px-2 py-0.5 text-100 font-medium text-signature-text">
-                  {pending} pendientes
-                </span>
-              )}
-            </h2>
-            <Link
-              href="/habits"
-              className="inline-flex items-center gap-1 text-200 text-fg-subtle transition-colors hover:text-fg-default"
-            >
-              Ir <ArrowUpRight className="size-3.5" />
-            </Link>
-          </div>
-          <div className="flex flex-col gap-1 p-3">
-            {habits.length === 0 && (
-              <p className="px-2 py-6 text-center text-200 text-fg-subtlest">Sin hábitos aún.</p>
-            )}
-            {habits.map((h) => {
-              const status = logStatus.get(h.id);
-              return (
-                <Link
-                  key={h.id}
-                  href="/habits"
-                  className="flex items-center gap-3 rounded-md px-2 py-2 transition-colors hover:bg-surface-overlay"
-                >
-                  <span
-                    className={`flex size-6 items-center justify-center rounded-full ${
-                      status === 'done'
-                        ? 'bg-signature-soft text-signature-text'
-                        : 'border border-line-default text-transparent'
-                    }`}
-                  >
-                    <Flame className="size-3.5" />
-                  </span>
-                  <span className="flex-1 text-300 text-fg-default">{h.name}</span>
-                  {status && (
-                    <span className="text-100 text-fg-subtlest">
-                      {status === 'done' ? 'hecho' : 'salteado'}
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-      </div>
-    </div>
-  );
+  return <DashboardOverview data={data} />;
 }

@@ -49,6 +49,24 @@
 - Monorepo: `metro.config.js` (watch del workspace + package exports) y `.npmrc` `node-linker=hoisted`
   (recomendado por Expo para pnpm).
 
+## Hubs reales + Dashboard con impacto + fondo negro ✅
+
+- **Fondo negro neutro**: se reemplazó el Onyx teal (#0A171D) por negro neutro (#0A0A0C base,
+  #131317 raised, #1C1C22 overlay) y se neutralizaron texto/bordes en dark. Los colores ahora son
+  **solo de acento**. Cada hub tiene un acento propio: Productividad teal #3FA9B8, Finanzas verde
+  #7CC96A, Conocimiento violeta #9F8FEF, Movimiento durazno #FFBD76 (`lib/hubs.ts`).
+- **Hubs de verdad** (no agrupaciones): el sidebar muestra **un item por hub** (Dashboard +
+  Productividad/Finanzas/Conocimiento/Movimiento). Cada hub navega a su **página-dashboard** y tiene
+  un chevron que despliega sus módulos. Acento del hub en activo. Bottom-nav mobile = los hubs.
+- **Dashboard principal (`/`) rehecho**: "una mirada de toda tu vida". Tiles por hub con mini-viz,
+  **área de flujo 6 meses** (recharts con gradientes + tooltip custom + hover), anillo de hábitos
+  (conic-gradient), donut de gastos por rubro, barras de estudio semanal, countdown de examen, foco
+  de hoy y próximos vencimientos. Micro-animaciones de entrada (`astor-rise/fade`) + hover lift, sin
+  librerías extra; respeta `prefers-reduced-motion`.
+- **Páginas de hub**: `/conocimiento` (estudios + programas con progreso, Ideas & Notas pronto),
+  `/movimiento` (Entrenos/Recetas/Objetivos, en construcción). Productividad suma cards de vistazo
+  (Tareas/Hábitos/Enfoque) sobre el planificador.
+
 ## Finanzas — Reportes de gastos ✅
 
 - **Dominio** `getSpendingReport(ctx, meses)`: análisis multi-mes (3/6/12) con tendencia por mes
