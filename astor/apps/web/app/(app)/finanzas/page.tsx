@@ -37,7 +37,7 @@ export default async function FinanzasPage({
         categories={categories}
         accounts={accounts}
         report={report}
-        fxBlue={fx.blue ?? null}
+        fxMep={fx.mep ?? fx.blue ?? null}
         timezone={ctx.timezone}
       />
     </div>

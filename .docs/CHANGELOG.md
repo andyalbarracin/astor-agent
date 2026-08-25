@@ -49,6 +49,21 @@
 - Monorepo: `metro.config.js` (watch del workspace + package exports) y `.npmrc` `node-linker=hoisted`
   (recomendado por Expo para pnpm).
 
+## Hubs + Finanzas AR — cuotas inline + MEP ✅
+
+- **Reestructura a hubs**: la navegación se agrupa en **Productividad** (Planificador, Tareas,
+  Hábitos), **Finanzas** (Registro, Tarjetas, Patrimonio, +Inversiones pronto), **Conocimiento**
+  (Estudios, +Ideas & Notas pronto) y **Movimiento** (Entrenos, Recetas — pronto). **Enfoque** deja
+  de ser sección y pasa a **widget dentro de Productividad** (`/enfoque` redirige). Sidebar con
+  headers de hub; bottom-nav mobile con los hubs con ruta construida.
+- **Consumo con crédito → cuotas inline**: al cargar un gasto, si la forma de pago es una cuenta
+  `tarjeta_credito`, aparece el selector de **cuotas**; con más de 1 se genera el **plan** (se
+  reparte en los resúmenes por cierre/vencimiento) en vez de una transacción suelta. `createInstallmentPlan`
+  ahora resuelve la tarjeta por `accountId` cuando no se pasa `cardId`.
+- **Dólar MEP**: la conversión USD→ARS de patrimonio y los labels de Finanzas usan **MEP**
+  (`rates.mep ?? blue ?? oficial`). `NetWorthSummary.blueRate` → `usdRate`.
+- **Término**: en Tarjetas "Nuevo plan" → **"Compra"** ("Nueva compra en cuotas").
+
 ## Finanzas AR — Cuotas + Tarjetas ✅ (diferenciador)
 
 - **Migración `0011_cards_installments.sql`**: `credit_cards` (cierre/vencimiento ≠ mes calendario),

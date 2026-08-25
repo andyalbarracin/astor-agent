@@ -239,7 +239,7 @@ function NewPlanDialog({ cards }: { cards: CreditCard[] }) {
         cardId: cardId === 'none' ? null : cardId,
       });
       if (r.ok) {
-        toast.success('Plan de cuotas creado');
+        toast.success('Compra en cuotas cargada');
         setDescription(''); setTotal(''); setCount('12');
         setOpen(false);
         router.refresh();
@@ -250,10 +250,10 @@ function NewPlanDialog({ cards }: { cards: CreditCard[] }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="signature" size="sm"><Plus className="size-4" /> Nuevo plan</Button>
+        <Button variant="signature" size="sm"><Plus className="size-4" /> Compra</Button>
       </DialogTrigger>
       <DialogContent className="max-w-md">
-        <DialogHeader><DialogTitle>Nuevo plan de cuotas</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle>Nueva compra en cuotas</DialogTitle></DialogHeader>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="p-desc">Descripción</Label>

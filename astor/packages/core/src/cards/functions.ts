@@ -45,13 +45,17 @@ export async function createInstallmentPlan(ctx: DomainContext, input: CreateIns
     const { data } = await ctx.supabase.from('credit_cards').select().eq('id', d.cardId).single();
     card = data ?? null;
     if (!card) throw new DomainError('not_found', 'Tarjeta no encontrada.');
+  } else if (d.accountId) {
+    // Consumo con crédito: resolver la tarjeta asociada a esa forma de pago.
+    const { data } = await ctx.supabase.from('credit_cards').select().eq('account_id', d.accountId).maybeSingle();
+    card = data ?? null;
   }
 
   const { data: plan, error: planErr } = await ctx.supabase
     .from('installment_plans')
     .insert({
       user_id: ctx.userId,
-      credit_card_id: d.cardId ?? null,
+      credit_card_id: card?.id ?? null,
       description: d.description,
       total_amount: d.totalAmount,
       currency: d.currency,

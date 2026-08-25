@@ -14,7 +14,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import { createTransactionAction } from '@/app/actions/finance';
+import { createTransactionAction, createInstallmentPlanAction } from '@/app/actions/finance';
+import { fmt } from './finance-view';
+
+const CUOTA_OPTIONS = [1, 3, 6, 9, 12, 18, 24];
 
 export function AddTransactionDialog({
   categories,
@@ -39,22 +42,35 @@ export function AddTransactionDialog({
   const [kind, setKind] = useState<'expense' | 'income'>('expense');
   const [categoryId, setCategoryId] = useState('none');
   const [accountId, setAccountId] = useState('none');
+  const [cuotas, setCuotas] = useState(1);
+
+  const selectedAccount = accounts.find((a) => a.id === accountId);
+  const isCredit = selectedAccount?.type === 'tarjeta_credito' && kind === 'expense';
 
   function submit() {
     const amt = Number(amount);
     if (!description.trim() || !amt) return;
     start(async () => {
-      const res = await createTransactionAction({
-        description: description.trim(),
-        amount: amt,
-        occurredOn: date,
-        kind,
-        categoryId: categoryId === 'none' ? undefined : categoryId,
-        accountId: accountId === 'none' ? undefined : accountId,
-      });
+      // Consumo con crédito en cuotas → genera el plan (se reparte en resúmenes).
+      const res = isCredit && cuotas > 1
+        ? await createInstallmentPlanAction({
+            description: description.trim(),
+            totalAmount: amt,
+            installmentsCount: cuotas,
+            firstChargeDate: date,
+            accountId,
+          })
+        : await createTransactionAction({
+            description: description.trim(),
+            amount: amt,
+            occurredOn: date,
+            kind,
+            categoryId: categoryId === 'none' ? undefined : categoryId,
+            accountId: accountId === 'none' ? undefined : accountId,
+          });
       if (res.ok) {
-        toast.success('Movimiento cargado');
-        setDescription(''); setAmount(''); setCategoryId('none'); setAccountId('none');
+        toast.success(isCredit && cuotas > 1 ? `Compra en ${cuotas} cuotas cargada` : 'Movimiento cargado');
+        setDescription(''); setAmount(''); setCategoryId('none'); setAccountId('none'); setCuotas(1);
         setOpen(false);
         router.refresh();
       } else toast.error(res.error);
@@ -103,7 +119,7 @@ export function AddTransactionDialog({
             </div>
             <div className="flex flex-col gap-1.5">
               <Label>Forma de pago</Label>
-              <Select value={accountId} onValueChange={setAccountId}>
+              <Select value={accountId} onValueChange={(v) => { setAccountId(v); setCuotas(1); }}>
                 <SelectTrigger><SelectValue placeholder="Ninguna" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">Ninguna</SelectItem>
@@ -112,6 +128,22 @@ export function AddTransactionDialog({
               </Select>
             </div>
           </div>
+          {isCredit && (
+            <div className="flex flex-col gap-1.5 rounded-md border border-line-subtle bg-surface-overlay p-3">
+              <Label>Cuotas</Label>
+              <Select value={String(cuotas)} onValueChange={(v) => setCuotas(Number(v))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {CUOTA_OPTIONS.map((n) => <SelectItem key={n} value={String(n)}>{n === 1 ? '1 pago' : `${n} cuotas`}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              {cuotas > 1 && Number(amount) > 0 && (
+                <p className="text-100 text-fg-subtlest">
+                  {cuotas} cuotas de {fmt(Number(amount) / cuotas)} → se genera el plan en Tarjetas y se reparte en los resúmenes.
+                </p>
+              )}
+            </div>
+          )}
         </div>
         <DialogFooter>
           <Button variant="ghost" onClick={() => setOpen(false)}>Cancelar</Button>

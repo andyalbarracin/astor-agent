@@ -249,19 +249,19 @@ export type NetWorthSummary = {
   assetsTotal: number;
   liabilitiesTotal: number;
   net: number;
-  blueRate: number;
+  usdRate: number;
 };
 
-/** Patrimonio: convierte USD→ARS por blue y calcula activos, pasivos y neto. */
+/** Patrimonio: convierte USD→ARS por MEP y calcula activos, pasivos y neto. */
 export async function getNetWorthSummary(ctx: DomainContext): Promise<NetWorthSummary> {
   const [items, rates] = await Promise.all([listNetWorth(ctx), latestFxRates(ctx)]);
-  const blue = rates.blue ?? rates.mep ?? rates.oficial ?? 1;
-  const arsValue = (i: NetWorthItem) => (i.currency === 'USD' ? Number(i.amount) * blue : Number(i.amount));
+  const usd = rates.mep ?? rates.blue ?? rates.oficial ?? 1;
+  const arsValue = (i: NetWorthItem) => (i.currency === 'USD' ? Number(i.amount) * usd : Number(i.amount));
   let assetsTotal = 0;
   let liabilitiesTotal = 0;
   for (const i of items) {
     if (i.kind === 'asset') assetsTotal += arsValue(i);
     else liabilitiesTotal += arsValue(i);
   }
-  return { items, assetsTotal, liabilitiesTotal, net: assetsTotal - liabilitiesTotal, blueRate: blue };
+  return { items, assetsTotal, liabilitiesTotal, net: assetsTotal - liabilitiesTotal, usdRate: usd };
 }

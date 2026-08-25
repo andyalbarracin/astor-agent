@@ -29,7 +29,7 @@ export function PatrimonioView({
           <ArrowLeft className="size-4" /> Finanzas
         </Link>
         <h1 className="text-700 font-bold tracking-[-0.02em] text-fg-default">Estado financiero</h1>
-        <p className="text-200 text-fg-subtle">Activos, pasivos y patrimonio (USD convertido a blue ${summary.blueRate.toLocaleString('es-AR')}).</p>
+        <p className="text-200 text-fg-subtle">Activos, pasivos y patrimonio (USD convertido a MEP ${summary.usdRate.toLocaleString('es-AR')}).</p>
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">

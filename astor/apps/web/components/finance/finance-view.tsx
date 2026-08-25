@@ -30,7 +30,7 @@ export function FinanceView({
   categories,
   accounts,
   report,
-  fxBlue,
+  fxMep,
   timezone,
 }: {
   month: string;
@@ -38,7 +38,7 @@ export function FinanceView({
   categories: FinanceCategory[];
   accounts: Account[];
   report: FinanceReport;
-  fxBlue: number | null;
+  fxMep: number | null;
   timezone: string;
 }) {
   const router = useRouter();
@@ -77,9 +77,9 @@ export function FinanceView({
           </button>
         </div>
         <div className="flex items-center gap-2">
-          {fxBlue && (
+          {fxMep && (
             <span className="hidden items-center gap-1 rounded-md border border-line-subtle px-2.5 py-1.5 text-100 text-fg-subtle sm:inline-flex">
-              <TrendingUp className="size-3.5 text-success-default" /> blue ${fxBlue.toLocaleString('es-AR')}
+              <TrendingUp className="size-3.5 text-success-default" /> MEP ${fxMep.toLocaleString('es-AR')}
             </span>
           )}
           <Button asChild variant="secondary" size="sm">
@@ -95,7 +95,7 @@ export function FinanceView({
 
       {/* Totales */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <Stat label="Gastos del mes" value={fmt(report.totalExpense)} sub={fxBlue ? `≈ US$ ${Math.round(report.totalExpense / fxBlue).toLocaleString('es-AR')}` : undefined} tone="danger" hero />
+        <Stat label="Gastos del mes" value={fmt(report.totalExpense)} sub={fxMep ? `≈ US$ ${Math.round(report.totalExpense / fxMep).toLocaleString('es-AR')}` : undefined} tone="danger" hero />
         <Stat label="Ingresos" value={fmt(report.totalIncome)} tone="success" />
         <Stat label="Neto" value={fmt(report.net)} tone={report.net >= 0 ? 'success' : 'danger'} />
       </div>

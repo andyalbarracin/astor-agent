@@ -14,6 +14,7 @@ export type CreateCreditCardInput = z.input<typeof createCreditCardInput>;
 
 export const createInstallmentPlanInput = z.object({
   cardId: z.string().uuid().nullish(),
+  accountId: z.string().uuid().nullish(), // si no hay cardId, se resuelve la tarjeta por su cuenta
   description: z.string().trim().min(1).max(200),
   totalAmount: z.number().positive(),
   currency: z.string().max(8).default('ARS'),
